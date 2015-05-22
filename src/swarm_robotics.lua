@@ -1,3 +1,7 @@
+ROOM_COLORS = {"magenta", "blue", "orange", "red"}
+G_ROBOT_COLOR = "yellow"
+L_ROBOT_COLOR = "cyan"
+
 --[[
  This function is executed every time you press the 'execute' button.
 --]]
