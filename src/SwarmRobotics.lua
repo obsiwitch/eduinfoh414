@@ -45,7 +45,6 @@ end
 --]]
 function reset()
    init()
-   resetAvoid()
 end
 
 --[[
