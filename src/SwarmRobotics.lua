@@ -1,8 +1,6 @@
+require "src/RobotType"
 require "src/RoomDetection"
 require "src/ObstacleAvoidance"
-
-G_ROBOT_COLOR = "yellow"
-L_ROBOT_COLOR = "cyan"
 
 --[[
  Set of rooms which need to be explored. This set is filled at the beginning
@@ -14,39 +12,10 @@ rooms = {}
 
 --[[
  Current robot's type (G or L).
- Initialized to U (unknown) and then set to its correct value in the init()
+ Initialized to U (unknown) and then sets it to its correct value in the init()
  function.
 --]]
 robotType = "U"
-
---[[
- Gets the current robot's type.
- * type G: ground sensor
- * type L: light sensor
- * type U: unknown
---]]
-function getRobotType()
-    if (robot.motor_ground ~= nil) then
-        return "G"
-    elseif (robot.light ~= nil) then
-        return "L"
-    else
-        return "U"
-    end
-end
-
---[[
- Sets the robot's color depending on its type.
- * type G: yellow
- * type L: cyan
---]]
-function setRobotColor(robotType)
-    if (robotType == "G") then
-        robot.leds.set_all_colors(G_ROBOT_COLOR)
-    elseif (robotType == "L") then
-        robot.leds.set_all_colors(L_ROBOT_COLOR)
-    end
-end
 
 --[[
  Detects the rooms and retrieves the current robot's type.
