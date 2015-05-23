@@ -34,7 +34,7 @@ end
  controller
 --]]
 function step()
-    stepAvoid(rooms)
+    stepAvoid()
 end
 
 --[[
