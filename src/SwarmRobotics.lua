@@ -1,6 +1,13 @@
-ROOM_COLORS = {"magenta", "blue", "orange", "red"}
+require "src/ObstacleAvoidance"
+
 G_ROBOT_COLOR = "yellow"
 L_ROBOT_COLOR = "cyan"
+
+--[[
+ List of rooms which need to be explored. This list is filled at the beginning
+ by using the camera to detect doors.
+--]]
+rooms = {}
 
 --[[
  Current robot's type (G or L).
@@ -51,7 +58,7 @@ end
  controller
 --]]
 function step()
-    -- TODO
+    stepAvoid()
 end
 
 --[[
@@ -69,5 +76,4 @@ end
  simulation.
 --]]
 function destroy()
-   -- TODO
 end
