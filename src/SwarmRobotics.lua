@@ -34,7 +34,7 @@ end
  controller
 --]]
 function step()
-    stepAvoid()
+    stepAvoid(rooms)
 end
 
 --[[
@@ -45,6 +45,7 @@ end
 --]]
 function reset()
    init()
+   resetAvoid()
 end
 
 --[[
