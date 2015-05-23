@@ -1,11 +1,14 @@
+require "src/RoomDetection"
 require "src/ObstacleAvoidance"
 
 G_ROBOT_COLOR = "yellow"
 L_ROBOT_COLOR = "cyan"
 
 --[[
- List of rooms which need to be explored. This list is filled at the beginning
+ Set of rooms which need to be explored. This set is filled at the beginning
  by using the camera to detect doors.
+ 
+ Example of element contained in the set: ["25500"] = false
 --]]
 rooms = {}
 
@@ -38,19 +41,23 @@ end
  * type L: cyan
 --]]
 function setRobotColor(robotType)
-	if (robotType == "G") then
-		robot.leds.set_all_colors(G_ROBOT_COLOR)
-	elseif (robotType == "L") then
-		robot.leds.set_all_colors(L_ROBOT_COLOR)
-	end
+    if (robotType == "G") then
+        robot.leds.set_all_colors(G_ROBOT_COLOR)
+    elseif (robotType == "L") then
+        robot.leds.set_all_colors(L_ROBOT_COLOR)
+    end
 end
 
 --[[
- This function is executed every time you press the 'execute' button.
+ Detects the rooms and retrieves the current robot's type.
 --]]
 function init()
-	robotType = getRobotType()
-	setRobotColor(robotType)
+    robot.colored_blob_omnidirectional_camera.enable()
+    
+    rooms = detectRooms()
+    
+    robotType = getRobotType()
+    setRobotColor(robotType)
 end
 
 --[[
