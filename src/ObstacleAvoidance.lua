@@ -4,32 +4,45 @@
 --]]
 
 --[[
+ Converts cylindrical coordinates to cartesian coordinates.
+--]]
+function cylindricalToCartesianCoords(cartesianCoords)
+    return {
+        x = cartesianCoords.value * math.cos(cartesianCoords.angle),
+        y = cartesianCoords.value * math.sin(cartesianCoords.angle)
+    }
+end
+
+--[[
+ Converts cartesian coordinates to cylindrical coordinates.
+--]]
+function CartesianTocylindricalCoords(cylindricalCoords)
+    return {
+        value = math.sqrt(cylindricalCoords.x^2 + cylindricalCoords.y^2),
+        angle = math.atan2(cylindricalCoords.y, cylindricalCoords.x)
+    }
+end
+
+--[[
  Each proximity readings, in cylindrical coordinates, are treated as a vector.
  We want to head-tail add all these vectors in order to obtain the obstacle
  vector. In order to do so, we must convert the proximity readings into
  cartesian coordinates.
+ Returns the obstacle vector in cylindrical coordinates.
 --]]
 function getObstacleVector(proximityTable)
-	local accumulator = {x = 0, y = 0}
-	
-	for _,proximity in ipairs(proximityTable) do
-        -- cylindrical coordinates -> cartesian coordinates
-		local cartesianCoords = {
-			x = proximity.value * math.cos(proximity.angle),
-			y = proximity.value * math.sin(proximity.angle)
-		}
-		
-		accumulator.x = accumulator.x + cartesianCoords.x
-		accumulator.y = accumulator.y + cartesianCoords.y
-	end
-	
-	-- cartesian coordinates -> cylindrical coordinates
-    local obstacleVector = {
-        value = math.sqrt(accumulator.x^2 + accumulator.y^2),
-        angle = math.atan2(accumulator.y, accumulator.x)
-    }
-	
-	return obstacleVector
+    local accumulator = {x = 0, y = 0}
+    
+    for _,proximity in ipairs(proximityTable) do
+        local cartesianCoords = cylindricalToCartesianCoords(proximity)
+        
+        accumulator.x = accumulator.x + cartesianCoords.x
+        accumulator.y = accumulator.y + cartesianCoords.y
+    end
+    
+    local obstacleVector = CartesianTocylindricalCoords(accumulator)
+    
+    return obstacleVector
 end
 
 --[[
@@ -41,23 +54,22 @@ end
  the obstacle is to the x axis of the robot, the quicker the turn.
 --]]
 function stepAvoid()
-	local obstacleVector = getObstacleVector(robot.proximity)
+    local obstacleVector = getObstacleVector(robot.proximity)
     local obstacleDetected = (obstacleVector.value > 0.2)
 
-	if obstacleDetected then
-        
+    if obstacleDetected then
         -- Velocity which will be applied to the wheel corresponding to the
         -- side where the obstacle is.
         local velocity = math.max(0.5, math.cos(obstacleVector.angle)) * 10
         
-		if obstacleVector.angle > 0 then
+        if obstacleVector.angle > 0 then
             -- obstacle on the left
-			robot.wheels.set_velocity(velocity, 0)
-		else
+            robot.wheels.set_velocity(velocity, 0)
+        else
             -- obstacle on the right
-			robot.wheels.set_velocity(0, velocity)
-		end
-	else
-		robot.wheels.set_velocity(10,10)
-	end
+            robot.wheels.set_velocity(0, velocity)
+        end
+    else
+        robot.wheels.set_velocity(10,10)
+    end
 end
