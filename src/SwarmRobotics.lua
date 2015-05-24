@@ -3,45 +3,60 @@ require "src/RoomDetection"
 require "src/ObstacleAvoidance"
 
 --[[
+ Table listing the diffrent states a robot can enter.
+ * INIT_ROOMS: initializes the rooms set using the camera at the beginning
+ of the program.
+ * AVOID: obstacle avoidance, move randomly inside the environment
+--]]
+STATES = {
+    ["UNKNOWN"] = -1,
+    ["INIT_ROOMS"] = 0,
+    ["AVOID"] = 1
+}
+
+-- Current state
+state = STATES["UNKNOWN"]
+
+--[[
  Set of rooms which need to be explored. This set is filled at the beginning
  by using the camera to detect doors.
  
- Example of element contained in the set: ["25500"] = false
+ Example of element contained in the set (red room): ["25500"] = false
 --]]
 rooms = {}
 
 --[[
- Current robot's type (G or L).
- Initialized to U (unknown) and then sets it to its correct value in the init()
- function.
+ Current robot's type (G or L) (U = unknown).
 --]]
 robotType = "U"
 
 --[[
- Detects the rooms and retrieves the current robot's type.
+ Enables the camera and initialize variables (i.e. state, robotType).
 --]]
 function init()
     robot.colored_blob_omnidirectional_camera.enable()
     
-    rooms = detectRooms()
+    state = STATES["INIT_ROOMS"]
     
     robotType = getRobotType()
     setRobotColor(robotType)
 end
 
 --[[
- This function is executed at each time step. It must contain the logic of your
- controller
+ State machine executed at each time step.
+ @see STATES
 --]]
 function step()
-    stepAvoid()
+    if (state == STATES["INIT_ROOMS"]) then
+        rooms = detectRooms()
+        state = STATES["AVOID"]
+    elseif (state == STATES["AVOID"]) then
+        stepAvoid(rooms)
+    end
 end
 
 --[[
- This function is executed every time you press the 'reset' button in the GUI.
- It is supposed to restore the state of the controller to whatever it was right
- after init() was called. The state of sensors and actuators is reset
- automatically by ARGoS.
+ Call init() in order to restore the program to its initial state.
 --]]
 function reset()
    init()
