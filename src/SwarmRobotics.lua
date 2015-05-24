@@ -1,6 +1,7 @@
 require "src/RobotType"
 require "src/RoomDetection"
 require "src/ObstacleAvoidance"
+require "src/EvaluateRoom"
 
 --[[
  Table listing the diffrent states a robot can enter.
