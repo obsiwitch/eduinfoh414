@@ -11,7 +11,7 @@ NOT_DOORS_COLORS = {
 }
 
 --[[
- Detect rooms by using the omnidirectional camera.
+ Detects rooms by using the omnidirectional camera.
 --]]
 function detectRooms()
     local roomsSet = {}
@@ -29,7 +29,7 @@ function detectRooms()
 end
 
 --[[
- Retrieve information about the nearest door (i.e. distance, angle, color).
+ Retrieves information about the nearest door (i.e. distance, angle, color).
  If the robot knows it is in a target room, it can call this function to
  identify the room.
 --]]
