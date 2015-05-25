@@ -27,3 +27,25 @@ function detectRooms()
     
     return roomsSet
 end
+
+--[[
+ Retrieve information about the nearest door (i.e. distance, angle, color).
+ If the robot knows it is in a target room, it can call this function to
+ identify the room.
+--]]
+function getNearestDoor(rooms)
+    local nearestDoor
+    
+    for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do
+        local vColor = v.color.red .. v.color.green .. v.color.blue
+        local isDoor = (rooms[vColor] ~= nil)
+        
+        if isDoor then
+            if (nearestDoor == nil) or (v.distance < nearestDoor.distance) then
+                nearestDoor = v
+            end
+        end
+    end
+    
+    return nearestDoor
+end
