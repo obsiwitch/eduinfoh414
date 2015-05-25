@@ -26,10 +26,19 @@ function evaluateGround()
 end
 
 --[[
- TODO
+ Evaluates the light of a room by returning the highest value retrieved from
+ the sensors.
 --]]
 function evaluateLight()
-    -- TODO
+    local highestValue = 0
+    
+    for _,v in pairs(robot.light) do
+        if (v.value > highestValue) then
+            highestValue = v.value
+        end
+    end
+    
+    return highestValue
 end
 
 --[[
