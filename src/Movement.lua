@@ -12,6 +12,26 @@ local K_PROP = 20;
 local WHEELS_DISTANCE = 0.14;
 
 --[[
+ Converts cylindrical coordinates to cartesian coordinates.
+--]]
+function cylindricalToCartesianCoords(cartesianCoords)
+    return {
+        x = cartesianCoords.value * math.cos(cartesianCoords.angle),
+        y = cartesianCoords.value * math.sin(cartesianCoords.angle)
+    }
+end
+
+--[[
+ Converts cartesian coordinates to cylindrical coordinates.
+--]]
+function CartesianTocylindricalCoords(cylindricalCoords)
+    return {
+        value = math.sqrt(cylindricalCoords.x^2 + cylindricalCoords.y^2),
+        angle = math.atan2(cylindricalCoords.y, cylindricalCoords.x)
+    }
+end
+
+--[[
  Computes the speeds which need to be applied to both wheels in order to go in
  the direction of the specified angle.
  

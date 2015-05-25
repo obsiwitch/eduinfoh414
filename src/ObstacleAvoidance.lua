@@ -7,26 +7,6 @@ require "src/Movement"
 --]]
 
 --[[
- Converts cylindrical coordinates to cartesian coordinates.
---]]
-function cylindricalToCartesianCoords(cartesianCoords)
-    return {
-        x = cartesianCoords.value * math.cos(cartesianCoords.angle),
-        y = cartesianCoords.value * math.sin(cartesianCoords.angle)
-    }
-end
-
---[[
- Converts cartesian coordinates to cylindrical coordinates.
---]]
-function CartesianTocylindricalCoords(cylindricalCoords)
-    return {
-        value = math.sqrt(cylindricalCoords.x^2 + cylindricalCoords.y^2),
-        angle = math.atan2(cylindricalCoords.y, cylindricalCoords.x)
-    }
-end
-
---[[
  Each proximity readings, in cylindrical coordinates, are treated as a vector.
  We want to head-tail add all these vectors in order to obtain the obstacle
  vector. In order to do so, we must convert the proximity readings into
