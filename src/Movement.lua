@@ -32,6 +32,13 @@ function CartesianTocylindricalCoords(cylindricalCoords)
 end
 
 --[[
+ Determines whether the target is behind the robot or not.
+--]]
+function targetIsBehindRobot(targetAngle)
+    return (targetAngle > math.pi/2 or targetAngle < -math.pi/2)
+end
+
+--[[
  Computes the speeds which need to be applied to both wheels in order to go in
  the direction of the specified angle.
  
@@ -39,11 +46,10 @@ end
 --]]
 function ComputeSpeedsFromAngle(angle)
     local forwardMotionCoeff
-    local targetIsBehind = (angle > math.pi/2 or angle < -math.pi/2)
     
-    -- Compute the forward motion coeffcieint ([0,1]) from the angle. If the
+    -- Compute the forward motion coeffcient ([0,1]) from the angle. If the
     -- target is behind the robot, we just rotate (no forward motion).
-    if targetIsBehind then
+    if targetIsBehindRobot(angle) then
         forwardMotionCoeff = 0.0;
     else
         forwardMotionCoeff = math.cos(angle)
