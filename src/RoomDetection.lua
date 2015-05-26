@@ -49,3 +49,22 @@ function getNearestDoor(rooms)
     
     return nearestDoor
 end
+
+--[[
+ Retrieves information about a specific door (i.e. distance, angle, color).
+ Returns nil if the door was not seen by the camera.
+]]
+function getDoor(rgbRoomColor)
+    local door
+    
+    for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do
+        local vColor = v.color.red .. v.color.green .. v.color.blue
+        local isSoughtDoor = (vColor == rgbRoomColor)
+        
+        if isSoughtDoor then
+            return v
+        end
+    end
+    
+    return nil
+end

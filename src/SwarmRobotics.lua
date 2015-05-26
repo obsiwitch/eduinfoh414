@@ -1,7 +1,7 @@
+-- TODO clean requires
 require "src/RobotType"
 require "src/RoomDetection"
-require "src/ObstacleAvoidance"
-require "src/EvaluateRoom"
+require "src/MoveRoom"
 
 --[[
  Table listing the diffrent states a robot can enter.
@@ -9,14 +9,14 @@ require "src/EvaluateRoom"
  of the program.
  * AVOID: obstacle avoidance, move randomly inside the environment
 --]]
-STATES = {
+local STATES = {
     ["UNKNOWN"] = -1,
     ["INIT_ROOMS"] = 0,
     ["AVOID"] = 1
 }
 
 -- Current state
-state = STATES["UNKNOWN"]
+local state = STATES["UNKNOWN"]
 
 --[[
  Set of rooms which need to be explored. This set is filled at the beginning
@@ -24,12 +24,12 @@ state = STATES["UNKNOWN"]
  
  Example of element contained in the set (red room): ["25500"] = false
 --]]
-rooms = {}
+local rooms = {}
 
 --[[
  Current robot's type (G or L) (U = unknown).
 --]]
-robotType = "U"
+local robotType = "U"
 
 --[[
  Enables the camera and initialize variables (i.e. state, robotType).
@@ -50,9 +50,10 @@ end
 function step()
     if (state == STATES["INIT_ROOMS"]) then
         rooms = detectRooms()
+        initMoveIntoRoom("25500")
         state = STATES["AVOID"]
     elseif (state == STATES["AVOID"]) then
-        stepAvoid(rooms)
+        stepMoveIntoRoom()
     end
 end
 
