@@ -29,23 +29,6 @@ function getObstacleVector(proximityTable)
 end
 
 --[[
- Compute the opposite vector from a vector in cylindrical coordinates.
---]]
-function ComputeOppositeVector(cylindricalVector)
-    local oppositeAngle
-    if (cylindricalVector.angle > 0) then
-        oppositeAngle = cylindricalVector.angle - math.pi
-    else
-        oppositeAngle = cylindricalVector.angle + math.pi
-    end
-    
-    return {
-        value = -cylindricalVector.value,
-        angle = oppositeAngle
-    }
-end
-
---[[
  Use the proximity sensors to avoid obstacles. An obstacle vector is obtained
  by reading all the values from the sensors. We can then avoid obstacles by
  going in the direction of the opposite vector.
