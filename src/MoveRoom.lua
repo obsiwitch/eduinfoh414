@@ -11,14 +11,13 @@ require "src/Movement"
 local DOOR_THRESHOLD = 30
 
 local STATES = {
-    ["UNKNOWN"] = -1,
     ["DOOR_ATTRACTION"] = 0,
     ["MOVE_INTO_ROOM"] = 1,
     ["ROOM_ATTAINED"] = 2
 }
 
 -- Current state
-local state = STATES["UNKNOWN"]
+local state
 
 -- Door corresponding to the room to move into
 local rgbTargetDoor
