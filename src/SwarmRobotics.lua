@@ -1,7 +1,7 @@
 -- TODO clean requires
 require "src/RobotType"
 require "src/RoomDetection"
-require "src/MoveRoom"
+require "src/MoveIntoRoom"
 
 --[[
  Table listing the diffrent states a robot can enter.
