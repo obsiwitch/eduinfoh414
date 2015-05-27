@@ -1,3 +1,10 @@
+require "src/RobotType"
+
+OBJECT_COLOR = {
+    colorName = "green",
+    rgb = "02550"
+}
+
 --[[
  List of colors which are assigned for elements which are not doors (i.e. green
  for objects, yellow and cyan for robots). Use the rgb representation of the
@@ -5,9 +12,9 @@
  by directly using the values from the omnidirectional camera.
 --]]
 NOT_DOORS_COLORS = {
-    ["02550"] = "green",
-    ["2552550"] = "yellow",
-    ["0255255"] = "cyan"
+    [OBJECT_COLOR.rgb] = OBJECT_COLOR.colorName,
+    [G_ROBOT_COLOR.rgb] = G_ROBOT_COLOR.colorName,
+    [L_ROBOT_COLOR.rgb] = L_ROBOT_COLOR.colorName
 }
 
 --[[
