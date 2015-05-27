@@ -1,5 +1,5 @@
 --[[
-  This file holds functions related to robots movement.
+  This file holds functions related to robots movement and coordinates systems.
 --]]
 
 -- Max wheel speed
@@ -79,4 +79,22 @@ function computeOppositeVector(cylindricalVector)
         value = cylindricalVector.value,
         angle = oppositeAngle
     }
+end
+
+--[[
+ Sum cylindrical vectors head to tail.
+ Converts the 2 vectors into cartesian coordinates, sum them and convert them
+ back to cylindrical coordinates.
+--]]
+function headTailSumCylindricalVectors(vectors)
+    local accumulator = { x = 0, y = 0 }
+    
+    for _,v in ipairs(vectors) do
+        local vXY = cylindricalToCartesianCoords(v)
+        
+        accumulator.x = accumulator.x + vXY.x
+        accumulator.y = accumulator.y + vXY.y
+    end
+    
+    return cartesianTocylindricalCoords(accumulator)
 end

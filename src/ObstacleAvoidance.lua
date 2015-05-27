@@ -8,24 +8,19 @@ require "src/Movement"
 
 --[[
  Each proximity readings, in cylindrical coordinates, are treated as a vector.
- We want to head-tail add all these vectors in order to obtain the obstacle
- vector. In order to do so, we must convert the proximity readings into
- cartesian coordinates.
- Returns the obstacle vector in cylindrical coordinates.
+ Return the sum of these vectors (adde head to tail).
 --]]
 function getObstacleVector(proximityTable)
-    local accumulator = {x = 0, y = 0}
-    
-    for _,proximity in ipairs(proximityTable) do
-        local cartesianCoords = cylindricalToCartesianCoords(proximity)
-        
-        accumulator.x = accumulator.x + cartesianCoords.x
-        accumulator.y = accumulator.y + cartesianCoords.y
-    end
-    
-    local obstacleVector = cartesianTocylindricalCoords(accumulator)
-    
-    return obstacleVector
+    return headTailSumCylindricalVectors(proximityTable)
+end
+
+--[[
+ Get opposite vector from obstacle vector.
+--]]
+function getEscapeVector()
+    return computeOppositeVector(
+        getObstacleVector(robot.proximity)
+    )
 end
 
 --[[
@@ -34,9 +29,8 @@ end
  going in the direction of the opposite vector.
 --]]
 function stepAvoid()
-    local obstacleVector = getObstacleVector(robot.proximity)
-    local escapeVector = computeOppositeVector(obstacleVector)
-    local obstacleDetected = (obstacleVector.value > 0.2)
+    local escapeVector = getEscapeVector()
+    local obstacleDetected = (escapeVector.value > 0.2)
 
     if obstacleDetected then
         local speeds = computeSpeedsFromAngle(escapeVector.angle)
