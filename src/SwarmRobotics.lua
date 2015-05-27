@@ -5,26 +5,21 @@ require "src/MoveRoom"
 
 --[[
  Table listing the diffrent states a robot can enter.
- * INIT_ROOMS: initializes the rooms set using the camera at the beginning
- of the program.
- * AVOID: obstacle avoidance, move randomly inside the environment
+ * NOTHING
+ * INIT_SPLIT_ROOMS: initializes the MoveIntoRoom state machine with the nearest
+ room.
+ * SPLIT_ROOMS: move into the nearest room.
+ 
+ -- TODO update names
 --]]
 local STATES = {
-    ["UNKNOWN"] = -1,
-    ["INIT_ROOMS"] = 0,
-    ["AVOID"] = 1
+    ["NOTHING"] = 0,
+    ["INIT_SPLIT_ROOMS"] = 1,
+    ["SPLIT_ROOMS"] = 2
 }
 
 -- Current state
-local state = STATES["UNKNOWN"]
-
---[[
- Set of rooms which need to be explored. This set is filled at the beginning
- by using the camera to detect doors.
- 
- Example of element contained in the set (red room): ["25500"] = false
---]]
-local rooms = {}
+local state
 
 --[[
  Current robot's type (G or L) (U = unknown).
@@ -32,12 +27,17 @@ local rooms = {}
 local robotType = "U"
 
 --[[
+ Color (rgb) of the room associated with this robot.
+--]]
+local roomColor
+
+--[[
  Enables the camera and initialize variables (i.e. state, robotType).
 --]]
 function init()
     robot.colored_blob_omnidirectional_camera.enable()
     
-    state = STATES["INIT_ROOMS"]
+    state = STATES["NOTHING"]
     
     robotType = getRobotType()
     setRobotColor(robotType)
@@ -48,11 +48,17 @@ end
  @see STATES
 --]]
 function step()
-    if (state == STATES["INIT_ROOMS"]) then
-        rooms = detectRooms()
-        initMoveIntoRoom("25500")
-        state = STATES["AVOID"]
-    elseif (state == STATES["AVOID"]) then
+    if (state == STATES["NOTHING"]) then
+        -- Wait one time step before starting. This is done in order to avoid a
+        -- problem with the camera (returned distances during the first time
+        -- step are not correct).
+        state = STATES["INIT_SPLIT_ROOMS"]
+        
+    elseif (state == STATES["INIT_SPLIT_ROOMS"]) then
+        roomColor = initMoveIntoNearestRoom()
+        state = STATES["SPLIT_ROOMS"]
+        
+    elseif (state == STATES["SPLIT_ROOMS"]) then
         stepMoveIntoRoom()
     end
 end
@@ -61,7 +67,7 @@ end
  Call init() in order to restore the program to its initial state.
 --]]
 function reset()
-   init()
+    init()
 end
 
 --[[

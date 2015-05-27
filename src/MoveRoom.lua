@@ -31,6 +31,22 @@ function initMoveIntoRoom(rgbDoorColor)
 end
 
 --[[
+ Initializes the state machine. The room the robot will go into correspond to
+ the nearest door.
+ 
+ Returns the room color.
+--]]
+function initMoveIntoNearestRoom()
+    local nearestDoor = getNearestDoor()
+    rgbTargetDoor = nearestDoor.color.red
+        .. nearestDoor.color.green
+        .. nearestDoor.color.blue
+    state = STATES["DOOR_ATTRACTION"]
+    
+    return rgbTargetDoor
+end
+
+--[[
  Step function to move a robot to the specified room.
  1) attraction by door
  2) after threshold attained, move forward

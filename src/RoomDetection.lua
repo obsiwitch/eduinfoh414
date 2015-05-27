@@ -33,12 +33,12 @@ end
  If the robot knows it is in a target room, it can call this function to
  identify the room.
 --]]
-function getNearestDoor(rooms)
+function getNearestDoor()
     local nearestDoor
     
     for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do
         local vColor = v.color.red .. v.color.green .. v.color.blue
-        local isDoor = (rooms[vColor] ~= nil)
+        local isDoor = (NOT_DOORS_COLORS[vColor] == nil)
         
         if isDoor then
             if (nearestDoor == nil) or (v.distance < nearestDoor.distance) then
