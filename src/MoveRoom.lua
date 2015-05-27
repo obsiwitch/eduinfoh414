@@ -13,7 +13,7 @@ local DOOR_THRESHOLD = 30
 local STATES = {
     ["DOOR_ATTRACTION"] = 0,
     ["MOVE_INTO_ROOM"] = 1,
-    ["ROOM_ATTAINED"] = 2
+    ["INSIDE"] = 2
 }
 
 -- Current state
@@ -69,10 +69,10 @@ function stepMoveIntoRoom()
         robot.wheels.set_velocity(WHEEL_SPEED, WHEEL_SPEED)
         
         if (targetDoor.distance > DOOR_THRESHOLD) then
-            state = STATES["ROOM_ATTAINED"]
+            state = STATES["INSIDE"]
         end
         
-    elseif (state == STATES["ROOM_ATTAINED"]) then
+    elseif (state == STATES["INSIDE"]) then
         return true
     end
     

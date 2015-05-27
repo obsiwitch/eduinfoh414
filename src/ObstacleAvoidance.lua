@@ -7,6 +7,12 @@ require "src/Movement"
 --]]
 
 --[[
+  The obstacle vector must at least have a value superior to this constant in
+  order to be considered significant.
+--]]
+local OBSTACLE_VALUE_THRESHOLD = 0.2
+
+--[[
  Each proximity readings, in cylindrical coordinates, are treated as a vector.
  Return the sum of these vectors (adde head to tail).
 --]]
@@ -16,11 +22,16 @@ end
 
 --[[
  Get opposite vector from obstacle vector.
+ Returns a zero vector if the OBSTACLE_VALUE_THRESHOLD is not reached.
 --]]
 function getEscapeVector()
-    return computeOppositeVector(
-        getObstacleVector(robot.proximity)
-    )
+    local obstacleVector = getObstacleVector(robot.proximity)
+    
+    if (obstacleVector.value <= OBSTACLE_VALUE_THRESHOLD) then
+        return { angle = 0, value = 0 }
+    end
+    
+    return computeOppositeVector(obstacleVector)
 end
 
 --[[
@@ -30,12 +41,6 @@ end
 --]]
 function stepAvoid()
     local escapeVector = getEscapeVector()
-    local obstacleDetected = (escapeVector.value > 0.2)
-
-    if obstacleDetected then
-        local speeds = computeSpeedsFromAngle(escapeVector.angle)
-        robot.wheels.set_velocity(speeds[1], speeds[2])
-    else
-        robot.wheels.set_velocity(WHEEL_SPEED, WHEEL_SPEED)
-    end
+    local speeds = computeSpeedsFromAngle(escapeVector.angle)
+    robot.wheels.set_velocity(speeds[1], speeds[2])
 end
