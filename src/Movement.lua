@@ -76,7 +76,7 @@ function computeOppositeVector(cylindricalVector)
     end
     
     return {
-        value = -cylindricalVector.value,
+        value = cylindricalVector.value,
         angle = oppositeAngle
     }
 end
