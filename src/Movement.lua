@@ -24,7 +24,7 @@ end
 --[[
  Converts cartesian coordinates to cylindrical coordinates.
 --]]
-function CartesianTocylindricalCoords(cylindricalCoords)
+function cartesianTocylindricalCoords(cylindricalCoords)
     return {
         value = math.sqrt(cylindricalCoords.x^2 + cylindricalCoords.y^2),
         angle = math.atan2(cylindricalCoords.y, cylindricalCoords.x)
@@ -44,7 +44,7 @@ end
  
  @note this function was seen during the 4th course exercise (pattern_formation)
 --]]
-function ComputeSpeedsFromAngle(angle)
+function computeSpeedsFromAngle(angle)
     local forwardMotionCoeff
     
     -- Compute the forward motion coeffcient ([0,1]) from the angle. If the
@@ -67,7 +67,7 @@ end
 --[[
  Compute the opposite vector from a vector in cylindrical coordinates.
 --]]
-function ComputeOppositeVector(cylindricalVector)
+function computeOppositeVector(cylindricalVector)
     local oppositeAngle
     if (cylindricalVector.angle > 0) then
         oppositeAngle = cylindricalVector.angle - math.pi

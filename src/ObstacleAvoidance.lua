@@ -23,7 +23,7 @@ function getObstacleVector(proximityTable)
         accumulator.y = accumulator.y + cartesianCoords.y
     end
     
-    local obstacleVector = CartesianTocylindricalCoords(accumulator)
+    local obstacleVector = cartesianTocylindricalCoords(accumulator)
     
     return obstacleVector
 end
@@ -35,11 +35,11 @@ end
 --]]
 function stepAvoid()
     local obstacleVector = getObstacleVector(robot.proximity)
-    local escapeVector = ComputeOppositeVector(obstacleVector)
+    local escapeVector = computeOppositeVector(obstacleVector)
     local obstacleDetected = (obstacleVector.value > 0.2)
 
     if obstacleDetected then
-        local speeds = ComputeSpeedsFromAngle(escapeVector.angle)
+        local speeds = computeSpeedsFromAngle(escapeVector.angle)
         robot.wheels.set_velocity(speeds[1], speeds[2])
     else
         robot.wheels.set_velocity(WHEEL_SPEED, WHEEL_SPEED)

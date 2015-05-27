@@ -58,7 +58,7 @@ function stepMoveIntoRoom()
     local targetDoor = getDoor(rgbTargetDoor)
     
     if (state == STATES["DOOR_ATTRACTION"]) then
-        local speeds = ComputeSpeedsFromAngle(targetDoor.angle)
+        local speeds = computeSpeedsFromAngle(targetDoor.angle)
         robot.wheels.set_velocity(speeds[1], speeds[2])
         
         if (targetDoor.distance < DOOR_THRESHOLD) then
