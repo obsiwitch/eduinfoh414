@@ -5,7 +5,7 @@ require "src/MoveRoom"
 
 --[[
  Table listing the diffrent states a robot can enter.
- * NOTHING
+ * START
  * INIT_SPLIT_ROOMS: initializes the MoveIntoRoom state machine with the nearest
  room.
  * SPLIT_ROOMS: move into the nearest room.
@@ -13,7 +13,7 @@ require "src/MoveRoom"
  -- TODO update names
 --]]
 local STATES = {
-    ["NOTHING"] = 0,
+    ["START"] = 0,
     ["INIT_SPLIT_ROOMS"] = 1,
     ["SPLIT_ROOMS"] = 2
 }
@@ -37,7 +37,7 @@ local roomColor
 function init()
     robot.colored_blob_omnidirectional_camera.enable()
     
-    state = STATES["NOTHING"]
+    state = STATES["START"]
     
     robotType = getRobotType()
     setRobotColor(robotType)
@@ -48,7 +48,7 @@ end
  @see STATES
 --]]
 function step()
-    if (state == STATES["NOTHING"]) then
+    if (state == STATES["START"]) then
         -- Wait one time step before starting. This is done in order to avoid a
         -- problem with the camera (returned distances during the first time
         -- step are not correct).
