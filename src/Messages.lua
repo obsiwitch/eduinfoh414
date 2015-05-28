@@ -3,6 +3,13 @@
 --]]
 
 --[[
+ Index of the byte reserved for the ping message. This type of message is sent
+ by robots to notify their position. The position received from other robots is
+ then used to compute the robots interaction vector.
+--]]
+I_BYTE_PING = 1
+
+--[[
  Receives Messages filtered by distance. If a received message comes from a
  robot positioned at a distance greater than the specificied threshold, this
  message is discarded.

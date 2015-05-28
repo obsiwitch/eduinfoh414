@@ -21,13 +21,6 @@ local TARGET_DIST = 50
 local EPSILON = 20
 
 --[[
- Index of the byte reserved for the ping message. This type of message is sent
- by robots to notify their position. The position received from other robots is
- then used to compute the robots interaction vector.
---]]
-local I_BYTE_PING = 1
-
---[[
  This function should be used when robots are already inside a target room.
  Its purpose is to group robots inside their current target room between the
  light source and the door.
