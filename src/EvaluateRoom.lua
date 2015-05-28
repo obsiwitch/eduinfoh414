@@ -1,7 +1,5 @@
 require "src/RoomDetection"
 
-OBJECT_COLOR = "02550" -- green
-
 --[[
  Evaluates the ground color. Returns all the different ground colors detected by
  the ground (e.g. if the 4 sensors detect the same color, only return one
@@ -80,7 +78,7 @@ function evaluateObjects(nearestDoor)
     
     for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do
         local vColor = v.color.red .. v.color.green .. v.color.blue
-        local isObject = (vColor == OBJECT_COLOR)
+        local isObject = (vColor == OBJECT_COLOR.rgb)
         
         if (isObject and elementInTargetRoom(v, nearestDoor)) then
             nObjects = nObjects + 1
