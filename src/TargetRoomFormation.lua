@@ -21,9 +21,11 @@ local TARGET_DIST = 50
 local EPSILON = 20
 
 --[[
- Type of message sent by robots in order to notify their position.
+ Index of the byte reserved for the ping message. This type of message is sent
+ by robots to notify their position. The position received from other robots is
+ then used to compute the robots interaction vector.
 --]]
-local MSG_TYPE_PING = 1
+local I_BYTE_PING = 1
 
 --[[
  This function should be used when robots are already inside a target room.
@@ -34,12 +36,12 @@ local MSG_TYPE_PING = 1
 --]]
 function stepTargetRoomFormation(robotType)
     -- share position to other robots
-    sendMessage(MSG_TYPE_PING, {})
+    robot.range_and_bearing.set_data(I_BYTE_PING, 1)
     
-    -- target vector
+    -- target vector (door or light source)
     local targetVector = computeTargetVector(robotType)
     
-    -- escape vector
+    -- escape vector (escape from obstacles)
     local escapeVector = getEscapeVector()
     
     -- robots interaction
@@ -87,15 +89,17 @@ end
 --]]
 function computeRobotsInteraction()
     local accumulator = { x = 0, y = 0 }
-
-    for _,v in ipairs(receiveMessages(MSG_TYPE_PING)) do
-        local cartesianVector = cylindricalToCartesianCoords({
-            value = computeLennardJonesForce(v.range),
-            angle = v.horizontal_bearing
-        })
-        
-        accumulator.x = accumulator.x + cartesianVector.x
-        accumulator.y = accumulator.y + cartesianVector.y
+    
+    for _,msg in ipairs(robot.range_and_bearing) do
+        if msg.data[I_BYTE_PING] == 1 then
+            local cartesianVector = cylindricalToCartesianCoords({
+                value = computeLennardJonesForce(msg.range),
+                angle = msg.horizontal_bearing
+            })
+            
+            accumulator.x = accumulator.x + cartesianVector.x
+            accumulator.y = accumulator.y + cartesianVector.y
+        end
     end
     
     return cartesianTocylindricalCoords(accumulator)
