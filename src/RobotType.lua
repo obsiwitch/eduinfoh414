@@ -1,6 +1,6 @@
 G_ROBOT_COLOR = {
-    colorName = "yellow",
-    rgb = "2552550"
+    colorName = "white",
+    rgb = "255255255"
 }
 
 L_ROBOT_COLOR = {

@@ -1,5 +1,10 @@
 require "src/RobotType"
 
+LIGHT_SOURCE_COLOR = {
+    colorName = "yellow",
+    rgb = "2552550"
+}
+
 OBJECT_COLOR = {
     colorName = "green",
     rgb = "02550"
@@ -12,6 +17,7 @@ OBJECT_COLOR = {
  by directly using the values from the omnidirectional camera.
 --]]
 NOT_DOORS_COLORS = {
+    [LIGHT_SOURCE_COLOR.rgb] = LIGHT_SOURCE_COLOR.colorName,
     [OBJECT_COLOR.rgb] = OBJECT_COLOR.colorName,
     [G_ROBOT_COLOR.rgb] = G_ROBOT_COLOR.colorName,
     [L_ROBOT_COLOR.rgb] = L_ROBOT_COLOR.colorName
@@ -49,6 +55,28 @@ function getNearestDoor()
         
         if isDoor then
             if (nearestDoor == nil) or (v.distance < nearestDoor.distance) then
+                nearestDoor = v
+            end
+        end
+    end
+    
+    return nearestDoor
+end
+
+--[[
+ Retrieves information about the nearest element of the specificied type. The
+ type of an object is identified by its color.
+--]]
+function getNearestElement(rgbElementColor)
+    local nearestElement
+    
+    for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do
+        local vColor = v.color.red .. v.color.green .. v.color.blue
+        
+        if (rgbElementColor == vColor) then
+            if (nearestElement == nil)
+                or (v.distance < nearestElement.distance)
+            then
                 nearestDoor = v
             end
         end
