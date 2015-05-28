@@ -2,20 +2,24 @@
 require "src/RobotType"
 require "src/RoomDetection"
 require "src/MoveIntoRoom"
+require "src/TargetRoomFormation"
 
 --[[
  Table listing the diffrent states a robot can enter.
  * START
  * INIT_SPLIT_ROOMS: initializes the MoveIntoRoom state machine with the nearest
- room.
- * SPLIT_ROOMS: move into the nearest room.
+ room
+ * SPLIT_ROOMS: move into the nearest room
+ * ROOM_FORMATION: group robots inside rooms between the light source and the
+ door
  
  -- TODO update names
 --]]
 local STATES = {
     ["START"] = 0,
     ["INIT_SPLIT_ROOMS"] = 1,
-    ["SPLIT_ROOMS"] = 2
+    ["SPLIT_ROOMS"] = 2,
+    ["ROOM_FORMATION"] = 3
 }
 
 -- Current state
@@ -59,7 +63,14 @@ function step()
         state = STATES["SPLIT_ROOMS"]
         
     elseif (state == STATES["SPLIT_ROOMS"]) then
-        stepMoveIntoRoom()
+        local isInsideRoom = stepMoveIntoRoom()
+
+        if isInsideRoom then
+            state = STATES["ROOM_FORMATION"]
+        end
+    
+    elseif (state == STATES["ROOM_FORMATION"]) then
+        stepTargetRoomFormation(robotType)
     end
 end
 
