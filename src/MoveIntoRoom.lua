@@ -11,9 +11,9 @@ require "src/Movement"
 local DOOR_THRESHOLD = 30
 
 local STATES = {
-    ["DOOR_ATTRACTION"] = 0,
-    ["MOVE_INTO_ROOM"] = 1,
-    ["INSIDE"] = 2
+    DOOR_ATTRACTION = 0,
+    MOVE_INTO_ROOM = 1,
+    INSIDE = 2
 }
 
 -- Current state
@@ -26,7 +26,7 @@ local rgbTargetDoor
  Initializes the state machine.
 --]]
 function initMoveIntoRoom(rgbDoorColor)
-    state = STATES["DOOR_ATTRACTION"]
+    state = STATES.DOOR_ATTRACTION
     rgbTargetDoor = rgbDoorColor
 end
 
@@ -41,7 +41,7 @@ function initMoveIntoNearestRoom()
     rgbTargetDoor = nearestDoor.color.red
         .. nearestDoor.color.green
         .. nearestDoor.color.blue
-    state = STATES["DOOR_ATTRACTION"]
+    state = STATES.DOOR_ATTRACTION
     
     return rgbTargetDoor
 end
@@ -57,22 +57,22 @@ end
 function stepMoveIntoRoom()
     local targetDoor = getDoor(rgbTargetDoor)
     
-    if (state == STATES["DOOR_ATTRACTION"]) then
+    if (state == STATES.DOOR_ATTRACTION) then
         local speeds = computeSpeedsFromAngle(targetDoor.angle)
         robot.wheels.set_velocity(speeds[1], speeds[2])
         
         if (targetDoor.distance < DOOR_THRESHOLD) then
-            state = STATES["MOVE_INTO_ROOM"]
+            state = STATES.MOVE_INTO_ROOM
         end
         
-    elseif (state == STATES["MOVE_INTO_ROOM"]) then
+    elseif (state == STATES.MOVE_INTO_ROOM) then
         robot.wheels.set_velocity(WHEEL_SPEED, WHEEL_SPEED)
         
         if (targetDoor.distance > DOOR_THRESHOLD) then
-            state = STATES["INSIDE"]
+            state = STATES.INSIDE
         end
         
-    elseif (state == STATES["INSIDE"]) then
+    elseif (state == STATES.INSIDE) then
         return true
     end
     

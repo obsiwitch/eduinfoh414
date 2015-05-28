@@ -16,10 +16,10 @@ require "src/TargetRoomFormation"
  -- TODO update names
 --]]
 local STATES = {
-    ["START"] = 0,
-    ["INIT_SPLIT_ROOMS"] = 1,
-    ["SPLIT_ROOMS"] = 2,
-    ["ROOM_FORMATION"] = 3
+    START = 0,
+    INIT_SPLIT_ROOMS = 1,
+    SPLIT_ROOMS = 2,
+    ROOM_FORMATION = 3
 }
 
 -- Current state
@@ -41,7 +41,7 @@ local roomColor
 function init()
     robot.colored_blob_omnidirectional_camera.enable()
     
-    state = STATES["START"]
+    state = STATES.START
     
     robotType = getRobotType()
     setRobotColor(robotType)
@@ -52,24 +52,24 @@ end
  @see STATES
 --]]
 function step()
-    if (state == STATES["START"]) then
+    if (state == STATES.START) then
         -- Wait one time step before starting. This is done in order to avoid a
         -- problem with the camera (returned distances during the first time
         -- step are not correct).
-        state = STATES["INIT_SPLIT_ROOMS"]
+        state = STATES.INIT_SPLIT_ROOMS
         
-    elseif (state == STATES["INIT_SPLIT_ROOMS"]) then
+    elseif (state == STATES.INIT_SPLIT_ROOMS) then
         roomColor = initMoveIntoNearestRoom()
-        state = STATES["SPLIT_ROOMS"]
+        state = STATES.SPLIT_ROOMS
         
-    elseif (state == STATES["SPLIT_ROOMS"]) then
+    elseif (state == STATES.SPLIT_ROOMS) then
         local isInsideRoom = stepMoveIntoRoom()
 
         if isInsideRoom then
-            state = STATES["ROOM_FORMATION"]
+            state = STATES.ROOM_FORMATION
         end
     
-    elseif (state == STATES["ROOM_FORMATION"]) then
+    elseif (state == STATES.ROOM_FORMATION) then
         stepTargetRoomFormation(robotType)
     end
 end
