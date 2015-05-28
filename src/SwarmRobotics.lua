@@ -3,6 +3,7 @@ require "src/RobotType"
 require "src/RoomDetection"
 require "src/MoveIntoRoom"
 require "src/TargetRoomFormation"
+require "src/EvaluateRoom"
 
 --[[
  Table listing the diffrent states a robot can enter.
@@ -11,27 +12,27 @@ require "src/TargetRoomFormation"
  room
  * SPLIT_ROOMS: move into the nearest room
  * ROOM_FORMATION: group robots inside rooms between the light source and the
- door
- 
- -- TODO update names
+ door, and evaluate the room
+ * GATHER: TODO
 --]]
 local STATES = {
     START = 0,
     INIT_SPLIT_ROOMS = 1,
     SPLIT_ROOMS = 2,
-    ROOM_FORMATION = 3
+    ROOM_FORMATION = 3,
+    GATHER = 4
 }
 
 -- Current state
 local state
 
 --[[
- Current robot's type (G or L) (U = unknown).
+ Current robot's type (G or L)
 --]]
-local robotType = "U"
+local robotType
 
 --[[
- Color (rgb) of the room associated with this robot.
+ Color of the room associated with this robot.
 --]]
 local roomColor
 
@@ -66,11 +67,21 @@ function step()
         local isInsideRoom = stepMoveIntoRoom()
 
         if isInsideRoom then
+            initEvaluate()
             state = STATES.ROOM_FORMATION
         end
     
     elseif (state == STATES.ROOM_FORMATION) then
         stepTargetRoomFormation(robotType)
+        local evalStatus = stepEvaluate(roomColor, robotType)
+        
+        if evalStatus.finished then
+            state = STATES.GATHER
+        end
+    
+    elseif (state == STATES.GATHER) then
+        robot.wheels.set_velocity(0,0)
+        -- TODO
     end
 end
 

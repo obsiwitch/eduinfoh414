@@ -12,9 +12,10 @@ OBJECT_COLOR = {
 
 --[[
  List of colors which are assigned for elements which are not doors (i.e. green
- for objects, yellow and cyan for robots). Use the rgb representation of the
- colors as keys to easily be able to verify if a color exists in this table
- by directly using the values from the omnidirectional camera.
+ for objects, white and cyan for robots, yellow for light sources). Use the rgb
+ representation of the colors as keys to easily be able to verify if a color
+ exists in this table by directly using the values from the omnidirectional
+ camera.
 --]]
 NOT_DOORS_COLORS = {
     [LIGHT_SOURCE_COLOR.rgb] = LIGHT_SOURCE_COLOR.colorName,

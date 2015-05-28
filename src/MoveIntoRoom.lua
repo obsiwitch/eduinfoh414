@@ -1,4 +1,6 @@
 require "src/Movement"
+require "src/RoomDetection"
+require "src/Color"
 
 --[[
  Statemachine to move robots into a room.
@@ -20,14 +22,14 @@ local STATES = {
 local state
 
 -- Door corresponding to the room to move into
-local rgbTargetDoor
+local targetDoorColor
 
 --[[
  Initializes the state machine.
 --]]
-function initMoveIntoRoom(rgbDoorColor)
+function initMoveIntoRoom(doorColor)
     state = STATES.DOOR_ATTRACTION
-    rgbTargetDoor = rgbDoorColor
+    targetDoorColor = doorColor
 end
 
 --[[
@@ -38,12 +40,12 @@ end
 --]]
 function initMoveIntoNearestRoom()
     local nearestDoor = getNearestDoor()
-    rgbTargetDoor = nearestDoor.color.red
-        .. nearestDoor.color.green
-        .. nearestDoor.color.blue
+    
+    targetDoorColor = Color.new(nearestDoor.color)
+    
     state = STATES.DOOR_ATTRACTION
     
-    return rgbTargetDoor
+    return targetDoorColor
 end
 
 --[[
@@ -55,7 +57,7 @@ end
  Returns true once the robot is inside the room, else returns false.
 --]]
 function stepMoveIntoRoom()
-    local targetDoor = getDoor(rgbTargetDoor)
+    local targetDoor = getDoor(targetDoorColor.rgb)
     
     if (state == STATES.DOOR_ATTRACTION) then
         local speeds = computeSpeedsFromAngle(targetDoor.angle)
