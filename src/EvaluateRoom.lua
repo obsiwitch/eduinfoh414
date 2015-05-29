@@ -43,6 +43,10 @@ function initEvaluate()
         L = 0,
         G = 0
     }
+    
+    -- The room was not evaluated yet
+    robot.range_and_bearing.set_data(I_BYTE_ROOM_EVAL, 1)
+    
     state = STATES.EVAL_PARTIAL
 end
 
@@ -90,6 +94,9 @@ function stepEvaluate(roomColor, robotType)
         end
         
     elseif (state == STATES.SUM) then
+        -- room evaluated
+        robot.range_and_bearing.set_data(I_BYTE_ROOM_EVAL, 2)
+        
         return {
             finished = true,
             finalScore = (partialScores.L + partialScores.G)/2

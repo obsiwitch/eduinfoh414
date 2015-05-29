@@ -31,9 +31,14 @@ I_BYTE_PARTIAL = {
 }
 
 --[[
- Index of the bytes reserved for sharing a final score.
+ Index of the byte reserved for sharing a final score.
 --]]
 I_BYTE_TOTAL = 7
+
+--[[
+ Index of the byte reserved for sharing the evaluation status of a room.
+--]]
+I_BYTE_ROOM_EVAL = 8
 
 --[[
  Receives Messages filtered by distance. If a received message comes from a
