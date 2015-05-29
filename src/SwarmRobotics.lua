@@ -65,6 +65,10 @@ function step()
         
     elseif (state == STATES.SPLIT_ROOMS) then
         local isInsideRoom = stepMoveIntoRoom()
+        
+        -- Share position to robots already in state ROOM_FORMATION in order to
+        -- repulse them, and thus avoid being blocked in front of doors.
+        robot.range_and_bearing.set_data(I_BYTE_PING, 1)
 
         if isInsideRoom then
             initEvaluate()
