@@ -1,12 +1,4 @@
-G_ROBOT_COLOR = {
-    colorName = "white",
-    rgb = "255255255"
-}
-
-L_ROBOT_COLOR = {
-    colorName = "cyan",
-    rgb = "0255255"
-}
+require "src/Color"
 
 --[[
  Gets the current robot's type.

@@ -1,14 +1,5 @@
+require "src/Color"
 require "src/RobotType"
-
-LIGHT_SOURCE_COLOR = {
-    colorName = "yellow",
-    rgb = "2552550"
-}
-
-OBJECT_COLOR = {
-    colorName = "green",
-    rgb = "02550"
-}
 
 --[[
  List of colors which are assigned for elements which are not doors (i.e. green
@@ -18,10 +9,10 @@ OBJECT_COLOR = {
  camera.
 --]]
 NOT_DOORS_COLORS = {
-    [LIGHT_SOURCE_COLOR.rgb] = LIGHT_SOURCE_COLOR.colorName,
-    [OBJECT_COLOR.rgb] = OBJECT_COLOR.colorName,
-    [G_ROBOT_COLOR.rgb] = G_ROBOT_COLOR.colorName,
-    [L_ROBOT_COLOR.rgb] = L_ROBOT_COLOR.colorName
+    [LIGHT_SOURCE_COLOR.rgb] = true,
+    [OBJECT_COLOR.rgb] = true,
+    [G_ROBOT_COLOR.rgb] = true,
+    [L_ROBOT_COLOR.rgb] = true
 }
 
 --[[
