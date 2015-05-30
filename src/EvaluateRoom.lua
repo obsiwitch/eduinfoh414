@@ -110,6 +110,29 @@ function stepEvaluate(roomColor, robotType)
 end
 
 --[[
+ Receives partial scores (G and L). Returns the best received score.
+--]]
+function receivePartialScores(roomColor)
+    local best = { L = 0, G = 0 }
+    
+    for _,msg in ipairs(robot.range_and_bearing) do
+        local msgRoomColor = msg.data[I_BYTE_RGB.R]
+            .. msg.data[I_BYTE_RGB.G]
+            .. msg.data[I_BYTE_RGB.B]
+            
+        if (roomColor.rgb == msgRoomColor) then
+            local tmpL = msg.data[I_BYTE_PARTIAL.L]
+            local tmpG = msg.data[I_BYTE_PARTIAL.G]
+            
+            best.L = math.max(best.L, tmpL)
+            best.G = math.max(best.G, tmpG)
+        end
+    end
+    
+    return best
+end
+
+--[[
  Evaluates partially the room depending on the robot type.
  * type G robots: ground
  * type L robots: light + objects
