@@ -4,16 +4,18 @@ require "src/RoomDetection"
 require "src/MoveIntoRoom"
 require "src/TargetRoomFormation"
 require "src/EvaluateRoom"
+require "src/Gather"
 
 --[[
- Table listing the diffrent states a robot can enter.
+ Table listing the different states a robot can enter.
  * START
  * INIT_SPLIT_ROOMS: initializes the MoveIntoRoom state machine with the nearest
  room
  * SPLIT_ROOMS: move into the nearest room
  * ROOM_FORMATION: group robots inside rooms between the light source and the
  door, and evaluate the room
- * GATHER: TODO
+ * GATHER: gather robots that have already evaluated their room, and share
+ their score
 --]]
 local STATES = {
     START = 0,
@@ -80,12 +82,12 @@ function step()
         local evalStatus = stepEvaluate(roomColor, robotType)
         
         if evalStatus.finished then
+            Gather.init(roomColor, evalStatus.finalScore)
             state = STATES.GATHER
         end
     
     elseif (state == STATES.GATHER) then
-        robot.wheels.set_velocity(0,0)
-        -- TODO
+        Gather.step()
     end
 end
 

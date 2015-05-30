@@ -1,5 +1,6 @@
 require "src/Color"
 require "src/Messages"
+require "src/Movement"
 require "src/ObstacleAvoidance"
 require "src/RoomDetection"
 

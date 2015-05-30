@@ -39,7 +39,6 @@ I_BYTE_TOTAL = 7
  Index of the byte reserved for sharing the evaluation status of a room.
  * 1 -> not evaluated
  * 2 -> evaluated
- * 3 -> evaluated, but see other robots whose room has not yet been evaluated
 --]]
 I_BYTE_ROOM_EVAL = 8
 
