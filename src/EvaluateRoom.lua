@@ -45,6 +45,9 @@ function initEvaluate()
         G = 0
     }
     
+    -- The room is not evaluated yet
+    robot.leds.set_all_colors(NOT_EVALUATED.colorName)
+    
     state = STATES.EVAL_PARTIAL
 end
 
@@ -88,6 +91,9 @@ function stepEvaluate(roomColor, robotType)
         end
         
     elseif (state == STATES.SUM) then
+        -- room partially evaluated
+        robot.leds.set_all_colors(PARTIALLY_EVALUATED.colorName)
+        
         return {
             finished = true,
             finalScore = (partialScores.L + partialScores.G)/2
