@@ -51,7 +51,14 @@ function Gather.init(roomColor, roomScore)
         -- target (farthest robot)
         local targetVector = Gather.computeTargetRobot()
         
-        local speeds = computeSpeedsFromAngle(targetVector.angle)
+        -- escape vector (escape from obstacles)
+        local escapeVector = getEscapeVector()
+        
+        -- sum
+        local finalVector = headTailSumCylindricalVectors({
+            targetVector, escapeVector
+        })
+        local speeds = computeSpeedsFromAngle(finalVector.angle)
         robot.wheels.set_velocity(speeds[1], speeds[2])
     end
     
