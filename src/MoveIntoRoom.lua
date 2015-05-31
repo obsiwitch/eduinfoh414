@@ -1,6 +1,7 @@
 require "src/Movement"
 require "src/RoomDetection"
 require "src/Color"
+require "src/ObstacleAvoidance"
 
 --[[
  Statemachine to move robots into a room.
@@ -60,6 +61,13 @@ function MoveIntoRoom.init(doorColor)
     --]]
     function MoveIntoRoom.step()
         local targetDoor = getDoor(targetDoorColor)
+        
+        -- Obstacle detction if the target door is temporarily not visible by
+        -- the camera.
+        if (targetDoor == nil) then
+            stepAvoid()
+            return false
+        end
         
         if (state == STATES.DOOR_ATTRACTION) then
             local speeds = computeSpeedsFromAngle(targetDoor.angle)

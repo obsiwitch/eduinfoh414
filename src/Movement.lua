@@ -3,7 +3,7 @@
 --]]
 
 -- Max wheel speed
-WHEEL_SPEED = 10
+WHEEL_SPEED = 20
 
 -- Coefficient for computing the angular velocity
 local K_PROP = 20;

@@ -33,3 +33,14 @@ function getEscapeVector()
     
     return computeOppositeVector(obstacleVector)
 end
+
+--[[
+ Use the proximity sensors to avoid obstacles. An obstacle vector is obtained
+ by reading all the values from the sensors. We can then avoid obstacles by
+ going in the direction of the opposite vector.
+--]]
+function stepAvoid()
+    local escapeVector = getEscapeVector()
+    local speeds = computeSpeedsFromAngle(escapeVector.angle)
+    robot.wheels.set_velocity(speeds[1], speeds[2])
+end
