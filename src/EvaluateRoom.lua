@@ -3,113 +3,69 @@ require "src/Messages"
 require "src/Color"
 
 --[[
- This state machine has for purpose to evaluate a room score and share it with
- other robots in order to obtain the final score.
---]]
-
-
---[[
- * EVAL_PARTIAL: robots of both types evaluate ther room and share their partial
- scores between them. The state machine evolves to the next state if the score
- has not been modified for MAX_STEPS_NO_IMPROVEMENT.
- * SUM: sum the partial scores
---]]
-local STATES = {
-    EVAL_PARTIAL = 0,
-    SUM = 1
-}
-
---[[
- If no improvement has been made to the partial scores (ground or light +
+ If no improvement has been made to the partial score (ground or light +
  objects) for this number of steps, then we assume the score obtained is the
  correct one.
 --]]
 local MAX_STEPS_NO_IMPROVEMENT = 25
 
 --[[
- Number of steps during which no improvement has been made to the partial scores
+ Number of steps during which no improvement has been made to the partial score
  (ground or light + objects).
 --]]
 local steps
 
--- partial scores
-local partialScores
-
--- current state
-local state
+-- partial score
+local partialScore
 
 function initEvaluate()
     steps = 0
-    partialScores = {
-        L = 0,
-        G = 0
-    }
+    partialScore = 0
     
     -- The room is not evaluated yet
     robot.leds.set_all_colors(NOT_EVALUATED.colorName)
-    
-    state = STATES.EVAL_PARTIAL
 end
 
 --[[
- Evolves state machine.
+ Robots of both types evaluate ther room and share their partial score between
+ them. We assume the obtained score is correct if it has not been modified for
+ MAX_STEPS_NO_IMPROVEMENT.
 --]]
 function stepEvaluate(roomColor, robotType)
-    if (state == STATES.EVAL_PARTIAL) then
-        -- Local score
-        local localPartialScores = evaluatePartial(roomColor, robotType)
+    -- Local score
+    local localPartialScore = evaluatePartial(roomColor, robotType)
+    
+    -- best received partial score from robots of the same type
+    local sharedPartialScore = receivePartialScores(roomColor, robotType)
+    
+    local newPartialScore = math.max(localPartialScore, sharedPartialScore)
+    
+    -- keep best partial score
+    if (newPartialScore > partialScore) then
+        partialScore = math.max(partialScore, newPartialScore)
         
-        -- shared partial scores
-        local sharedPartialScores = receivePartialScores(roomColor)
-        
-        local newPartialScores = {
-            L = math.max(localPartialScores.L, sharedPartialScores.L),
-            G = math.max(localPartialScores.G, sharedPartialScores.G)
-        }
-        
-        -- keep best partial scores
-        if (newPartialScores.L > partialScores.L) or
-           (newPartialScores.G > partialScores.G)
-        then
-            partialScores.L = math.max(partialScores.L, newPartialScores.L)
-            partialScores.G = math.max(partialScores.G, newPartialScores.G)
-            
-            steps = 0
-        else
-            steps = steps + 1
-        end
-        
-        -- share best partial scores
-        shareScore(roomColor, I_BYTE_PARTIAL.L, partialScores.L)
-        shareScore(roomColor, I_BYTE_PARTIAL.G, partialScores.G)
-        
-        if (steps > MAX_STEPS_NO_IMPROVEMENT)
-            and (partialScores.L ~= 0)
-            and (partialScores.G ~= 0)
-        then
-            state = STATES.SUM
-        end
-        
-    elseif (state == STATES.SUM) then
-        -- room partially evaluated
-        robot.leds.set_all_colors(PARTIALLY_EVALUATED.colorName)
-        
-        return {
-            finished = true,
-            finalScore = (partialScores.L + partialScores.G)/2
-        }
+        steps = 0
+    else
+        steps = steps + 1
     end
     
-    return {
-        finished = false,
-        finalScore = 0
-    }
+    -- share best partial score
+    shareScore(roomColor, I_BYTE_PARTIAL[robotType], partialScore)
+    
+    if (steps > MAX_STEPS_NO_IMPROVEMENT) then
+        robot.leds.set_all_colors(PARTIALLY_EVALUATED.colorName)
+        return true
+    end
+    
+    return false
 end
 
 --[[
- Receives partial scores (G and L). Returns the best received score.
+ Receives partial scores (G and L). Returns the best received scores.
+ If a robotType is given in parameter, only return the best partial score for
+ this type of robot.
 --]]
-function receivePartialScores(roomColor)
+function receivePartialScores(roomColor, robotType)
     local best = { L = 0, G = 0 }
     
     for _,msg in ipairs(robot.range_and_bearing) do
@@ -128,7 +84,11 @@ function receivePartialScores(roomColor)
         end
     end
     
-    return best
+    if (robotType == nil) then
+        return best
+    else
+        return best[robotType]
+    end
 end
 
 --[[
@@ -136,23 +96,18 @@ end
  * type G robots: ground
  * type L robots: light + objects
  
- Returns a table containing the partial scores for L and G. If the current
- robot is a type G robot, then the L score will be 0, and vice versa. The score
- for the current type of robot is returned in the [0,255] interval.
+ Returns the partial score for the specified type of robot in the [0,255]
+ interval.
 --]]
 function evaluatePartial(roomColor, robotType)
-    local partialScores = { G = 0, L = 0}
-    
     if (robotType == "G") then
-        partialScores.G = convertScoreToByte(evaluateGround())
+        return convertScoreToByte(evaluateGround())
         
     elseif (robotType == "L") then
-        partialScores.L = convertScoreToByte(
+        return convertScoreToByte(
             (evaluateLight() + evaluateObjects())/2
         )
     end
-    
-    return partialScores
 end
 
 --[[

@@ -79,10 +79,10 @@ function step()
     
     elseif (state == STATES.ROOM_FORMATION) then
         stepTargetRoomFormation(robotType)
-        local evalStatus = stepEvaluate(roomColor, robotType)
+        local evalFinished = stepEvaluate(roomColor, robotType)
         
-        if evalStatus.finished then
-            Gather.init(roomColor, evalStatus.finalScore)
+        if evalFinished then
+            Gather.init(roomColor, 0) -- FIXME
             state = STATES.GATHER
         end
     

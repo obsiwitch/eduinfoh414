@@ -97,8 +97,8 @@ function Gather.init(roomColor, roomScore)
         for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do
             local vColor = Color.new(v.color)
             local isRobot = (
-                Color.eq(vColor, G_ROBOT_COLOR) or
-                Color.eq(vColor, L_ROBOT_COLOR)
+                Color.eq(vColor, PARTIALLY_EVALUATED) or
+                Color.eq(vColor, EVALUATED)
             )
             
             if isRobot and (v.distance > furthestRobot.value) then
