@@ -39,7 +39,7 @@ function MoveIntoRoom.init(doorColor)
      Threshold (cm) used to move into a room and detect if the robot is inside
      the room or not.
     --]]
-    local DOOR_THRESHOLD = 30
+    local DOOR_THRESHOLD = 20
     
     -- Private attributes
     

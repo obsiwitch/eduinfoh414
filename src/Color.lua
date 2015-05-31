@@ -23,7 +23,6 @@ LIGHT_SOURCE_COLOR = Color.new(
     "yellow"
 )
 
-
 OBJECT_COLOR = Color.new(
     { red = 0, green = 255, blue = 0 },
     "green"
