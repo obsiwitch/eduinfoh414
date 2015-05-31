@@ -73,13 +73,13 @@ function step()
         robot.range_and_bearing.set_data(I_BYTE_PING, 1)
 
         if isInsideRoom then
-            initEvaluate()
+            Evaluate.init()
             state = STATES.ROOM_FORMATION
         end
     
     elseif (state == STATES.ROOM_FORMATION) then
         stepTargetRoomFormation(robotType)
-        local evalFinished = stepEvaluate(roomColor, robotType)
+        local evalFinished = Evaluate.step(roomColor, robotType)
         
         if evalFinished then
             Gather.init(roomColor, 0) -- FIXME
