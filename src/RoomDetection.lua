@@ -22,11 +22,11 @@ function detectRooms()
     local roomsSet = {}
     
     for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do
-        local vColor = v.color.red .. v.color.green .. v.color.blue
-        local isDoor = (NOT_DOORS_COLORS[vColor] == nil)
+        local vColor = Color.new(v.color)
+        local isDoor = (NOT_DOORS_COLORS[vColor.rgb] == nil)
         
         if isDoor then
-            roomsSet[vColor] = false
+            roomsSet[vColor.rgb] = true
         end
     end
     
@@ -42,8 +42,8 @@ function getNearestDoor()
     local nearestDoor
     
     for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do
-        local vColor = v.color.red .. v.color.green .. v.color.blue
-        local isDoor = (NOT_DOORS_COLORS[vColor] == nil)
+        local vColor = Color.new(v.color)
+        local isDoor = (NOT_DOORS_COLORS[vColor.rgb] == nil)
         
         if isDoor then
             if (nearestDoor == nil) or (v.distance < nearestDoor.distance) then
@@ -59,13 +59,13 @@ end
  Retrieves information about the nearest element of the specificied type. The
  type of an object is identified by its color.
 --]]
-function getNearestElement(rgbElementColor)
+function getNearestElement(elementColor)
     local nearestElement
     
     for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do
-        local vColor = v.color.red .. v.color.green .. v.color.blue
+        local vColor = Color.new(v.color)
         
-        if (rgbElementColor == vColor) then
+        if Color.eq(elementColor, vColor) then
             if (nearestElement == nil)
                 or (v.distance < nearestElement.distance)
             then
@@ -81,12 +81,12 @@ end
  Retrieves information about a specific door (i.e. distance, angle, color).
  Returns nil if the door was not seen by the camera.
 ]]
-function getDoor(rgbRoomColor)
+function getDoor(roomColor)
     local door
     
     for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do
-        local vColor = v.color.red .. v.color.green .. v.color.blue
-        local isSoughtDoor = (vColor == rgbRoomColor)
+        local vColor = Color.new(v.color)
+        local isSoughtDoor = Color.eq(vColor, roomColor)
         
         if isSoughtDoor then
             return v

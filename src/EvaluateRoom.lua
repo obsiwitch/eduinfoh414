@@ -52,10 +52,6 @@ end
 
 --[[
  Evolves state machine.
- 
- roomColor should be a table containing the color's 3 separated
- components (red, green, blue) and also a string with the 3 components
- concatenated (rgb) (@see Color)
 --]]
 function stepEvaluate(roomColor, robotType)
     if (state == STATES.EVAL_PARTIAL) then
@@ -116,11 +112,13 @@ function receivePartialScores(roomColor)
     local best = { L = 0, G = 0 }
     
     for _,msg in ipairs(robot.range_and_bearing) do
-        local msgRoomColor = msg.data[I_BYTE_RGB.R]
-            .. msg.data[I_BYTE_RGB.G]
-            .. msg.data[I_BYTE_RGB.B]
-            
-        if (roomColor.rgb == msgRoomColor) then
+        local msgRoomColor = Color.new({
+            red = msg.data[I_BYTE_RGB.R],
+            green = msg.data[I_BYTE_RGB.G],
+            blue = msg.data[I_BYTE_RGB.B]
+        })
+        
+        if Color.eq(roomColor, msgRoomColor) then
             local tmpL = msg.data[I_BYTE_PARTIAL.L]
             local tmpG = msg.data[I_BYTE_PARTIAL.G]
             
@@ -234,8 +232,8 @@ function evaluateObjects()
     local nearestDoor = getNearestDoor()
     
     for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do
-        local vColor = v.color.red .. v.color.green .. v.color.blue
-        local isObject = (vColor == OBJECT_COLOR.rgb)
+        local vColor = Color.new(v.color)
+        local isObject = Color.eq(vColor, OBJECT_COLOR)
         
         if (isObject and elementInTargetRoom(v, nearestDoor)) then
             nObjects = nObjects + 1

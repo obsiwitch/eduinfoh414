@@ -57,7 +57,7 @@ end
  Returns true once the robot is inside the room, else returns false.
 --]]
 function stepMoveIntoRoom()
-    local targetDoor = getDoor(targetDoorColor.rgb)
+    local targetDoor = getDoor(targetDoorColor)
     
     if (state == STATES.DOOR_ATTRACTION) then
         local speeds = computeSpeedsFromAngle(targetDoor.angle)

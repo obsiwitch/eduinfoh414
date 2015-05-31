@@ -65,7 +65,7 @@ function computeTargetVector(robotType)
         }
         
     elseif (robotType == "L") then
-        local nearestLightSource = getNearestElement(LIGHT_SOURCE_COLOR.rgb)
+        local nearestLightSource = getNearestElement(LIGHT_SOURCE_COLOR)
         
         if (nearestLightSource ~= nil) then
             return {
