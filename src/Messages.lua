@@ -72,3 +72,10 @@ function shareScore(roomColor, scoreByte, score)
     robot.range_and_bearing.set_data(I_BYTE_RGB.B, roomColor.blue)
     robot.range_and_bearing.set_data(scoreByte, score)
 end
+
+--[[
+ Converts a score in [0,1] to a value in [0,255].
+--]]
+function convertScoreToByte(score)
+    return math.floor(255 * score)
+end

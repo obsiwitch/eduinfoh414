@@ -7,6 +7,7 @@ require "src/Color"
  other robots in order to obtain the final score.
 --]]
 
+
 --[[
  * EVAL_PARTIAL: robots of both types evaluate ther room and share their partial
  scores between them. The state machine evolves to the next state if the score
@@ -155,13 +156,6 @@ function evaluatePartial(roomColor, robotType)
 end
 
 --[[
- Converts a score in [0,1] to a value in [0,255].
---]]
-function convertScoreToByte(score)
-    return math.floor(255 * score)
-end
-
---[[
  Evaluates the ground color. Returns the highest value retrieved from the
  sensors.
 --]]
@@ -187,36 +181,6 @@ function evaluateLight()
     end
     
     return best
-end
-
---[[
- Returns whether the specified element is contained in the target room or not.
- The nearest door is used as a reference to determine the limit of the room.
- 
- @note This function will only work as intended in a target room, because this
- type of room only has one door. It will not work if it is used in the central
- room.
---]]
-function elementInTargetRoom(element, nearestDoor)
-    local elementIsBehindRobot = targetIsBehindRobot(element.angle)
-    local doorIsBehindRobot = targetIsBehindRobot(nearestDoor.angle)
-    
-    local elementXY = cylindricalToCartesianCoords({
-        value = element.distance,
-        angle = element.angle
-    })
-    
-    local doorXY = cylindricalToCartesianCoords({
-        value = nearestDoor.distance,
-        angle = nearestDoor.angle
-    })
-    
-    return (
-        (doorIsBehindRobot and not elementIsBehindRobot) or
-        (not doorIsBehindRobot and elementIsBehindRobot) or
-        (doorIsBehindRobot and (doorXY.x < elementXY.x)) or
-        (not doorIsBehindRobot and (elementXY.x < doorXY.x))
-    )
 end
 
 --[[
