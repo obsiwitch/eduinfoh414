@@ -62,11 +62,11 @@ function step()
         state = STATES.INIT_SPLIT_ROOMS
         
     elseif (state == STATES.INIT_SPLIT_ROOMS) then
-        roomColor = initMoveIntoNearestRoom()
+        roomColor = MoveIntoRoom.initNearest()
         state = STATES.SPLIT_ROOMS
         
     elseif (state == STATES.SPLIT_ROOMS) then
-        local isInsideRoom = stepMoveIntoRoom()
+        local isInsideRoom = MoveIntoRoom.step()
         
         -- Share position to robots already in state ROOM_FORMATION in order to
         -- repulse them, and thus avoid being blocked in front of doors.
