@@ -36,13 +36,6 @@ I_BYTE_PARTIAL = {
 I_BYTE_TOTAL = 7
 
 --[[
- Index of the byte reserved for sharing the evaluation status of a room.
- * 1 -> not evaluated
- * 2 -> evaluated
---]]
-I_BYTE_ROOM_EVAL = 8
-
---[[
  Receives Messages filtered by distance. If a received message comes from a
  robot positioned at a distance greater than the specificied threshold, this
  message is discarded.
