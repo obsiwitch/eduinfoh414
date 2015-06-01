@@ -7,7 +7,7 @@ Gather = {}
 --[[
  Initializes the Gather singleton.
 --]]
-function Gather.init(roomColor, roomScore)
+function Gather.init()
     -- Constants
     
     --[[
@@ -22,31 +22,14 @@ function Gather.init(roomColor, roomScore)
     --]]
     local EPSILON = 20
     
-    -- Private attributes
-    
-    local bestRoomColor = roomColor
-    local bestRoomScore = roomScore
-    
     -- Public methods
     
     --[[
-     Group robots and synchronize them to the best known score.
-     The more robots are far, the more they are attracted.
+     TODO
     --]]
     function Gather.step()
         -- share position to other robots
         robot.range_and_bearing.set_data(I_BYTE_PING, 1)
-        
-        -- retrieve and compare best score from neighbouring robots to current
-        -- best score
-        local sharedBestRoom = Gather.receiveFinalScores()
-        if (sharedBestRoom.score > bestRoomScore) then
-            bestRoomScore = sharedBestRoom.score
-            bestRoomColor = sharedBestRoom.color
-        end
-        
-        -- share current best score
-        shareScore(bestRoomColor, I_BYTE_TOTAL, bestRoomScore)
         
         -- target (farthest robot)
         local targetVector = Gather.computeTargetRobot()
@@ -60,31 +43,6 @@ function Gather.init(roomColor, roomScore)
         })
         local speeds = computeSpeedsFromAngle(finalVector.angle)
         robot.wheels.set_velocity(speeds[1], speeds[2])
-    end
-    
-    --[[
-     Receives rooms final score. Returns the best received one, as well as the
-     associated room's color.
-    --]]
-    function Gather.receiveFinalScores()
-        local best = { color = nil, score = 0 }
-        
-        for _,msg in ipairs(robot.range_and_bearing) do
-            local msgRoomColor = Color.new({
-                red = msg.data[I_BYTE_RGB.R],
-                green = msg.data[I_BYTE_RGB.G],
-                blue = msg.data[I_BYTE_RGB.B]
-            })
-            
-            local msgRoomScore = msg.data[I_BYTE_TOTAL]
-            
-            if (best.score < msgRoomScore) then
-                best.color = msgRoomColor
-                best.score = msgRoomScore
-            end
-        end
-        
-        return best
     end
     
     --[[

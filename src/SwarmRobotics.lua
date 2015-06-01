@@ -5,6 +5,7 @@ require "src/MoveIntoRoom"
 require "src/TargetRoomFormation"
 require "src/EvaluateRoom"
 require "src/Gather"
+require "src/SynchronizeScores"
 
 --[[
  Table listing the different states a robot can enter.
@@ -79,15 +80,17 @@ function step()
     
     elseif (state == STATES.ROOM_FORMATION) then
         stepTargetRoomFormation(robotType)
-        local evalFinished = Evaluate.step(roomColor, robotType)
+        local evalStatus = Evaluate.step(roomColor, robotType)
         
-        if evalFinished then
-            Gather.init(roomColor, 0) -- FIXME
+        if evalStatus.finished then
+            Gather.init()
+            Synchronize.init(robotType, evalStatus.partialScore, roomColor)
             state = STATES.GATHER
         end
     
     elseif (state == STATES.GATHER) then
         Gather.step()
+        Synchronize.step()
     end
 end
 

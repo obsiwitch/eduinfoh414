@@ -58,15 +58,21 @@ function Evaluate.init()
             steps = steps + 1
         end
         
-        -- share best partial score
+        -- share partial score
         shareScore(roomColor, I_BYTE_PARTIAL[robotType], partialScore)
         
         if (steps > MAX_STEPS_NO_IMPROVEMENT) then
             robot.leds.set_all_colors(PARTIALLY_EVALUATED.colorName)
-            return true
+            return {
+                finished = true,
+                partialScore = partialScore
+            }
         end
         
-        return false
+        return {
+            finished = false,
+            partialScore = partialScore
+        }
     end
     
     --[[
