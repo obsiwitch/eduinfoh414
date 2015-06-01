@@ -13,7 +13,7 @@ function Synchronize.init(robotType, partialScore, roomColor)
      If no improvement has been made to the scores for this number of steps,
      then we assume the obtained scores are the correct one.
     --]]
-    local MAX_STEPS_NO_IMPROVEMENT = 25
+    local MAX_STEPS_NO_IMPROVEMENT = 50
     
     local STATES = {
         INIT_SYNC_PARTIAL = 0,
@@ -122,14 +122,18 @@ function Synchronize.init(robotType, partialScore, roomColor)
                 steps = steps + 1
             end
             
-            if (steps > MAX_STEPS_NO_IMPROVEMENT) then
-                robot.leds.set_all_colors(EVALUATED.colorName)
-            else
-                robot.leds.set_all_colors(PARTIALLY_EVALUATED.colorName)
-            end
-            
             -- share current best score
             shareScore(bestRoomColor, I_BYTE_TOTAL, bestRoomScore)
+            
+            if (steps > MAX_STEPS_NO_IMPROVEMENT) then
+                robot.leds.set_all_colors(EVALUATED.colorName)
+                return bestRoomColor
+            else
+                robot.leds.set_all_colors(PARTIALLY_EVALUATED.colorName)
+                return nil
+            end
+            
+
             
             --[[
             -- detect missing partial score
@@ -145,6 +149,7 @@ function Synchronize.init(robotType, partialScore, roomColor)
             --]]
         end
         
+        return nil
     end
     
     --[[
@@ -224,5 +229,20 @@ function Synchronize.init(robotType, partialScore, roomColor)
         end
         
         return nil
+    end
+    
+    --[[
+     Returns true if all neighbouring robots have evaluated totally their
+     associated room, else false.
+    --]]
+    function Synchronize.checkEvalStatusRobots()
+        for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do
+            local vColor = Color.new(v.color)
+            if Color.eq(vColor, PARTIALLY_EVALUATED) then
+                return false
+            end
+        end
+        
+        return true
     end
 end
