@@ -69,8 +69,6 @@ function Synchronize.init(robotType, partialScore, roomColor)
             end
             
         elseif(state == STATES.SYNC_TOTAL) then
-            robot.leds.set_all_colors(EVALUATED.colorName)
-            
             -- retrieve and compare best score from neighbouring robots to
             -- current best score
             local sharedBestRoom = Synchronize.receiveFinalScores()
@@ -88,6 +86,9 @@ function Synchronize.init(robotType, partialScore, roomColor)
             if (missingRoomColor ~= nil) then
                 log(missingRoomColor.rgb)
                 -- TODO do something with the returned missingRoomColor
+                robot.leds.set_all_colors(PARTIALLY_EVALUATED.colorName)
+            else
+                robot.leds.set_all_colors(EVALUATED.colorName)
             end
             
             -- TODO return

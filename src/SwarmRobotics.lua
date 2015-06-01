@@ -48,7 +48,6 @@ function init()
     state = STATES.START
     
     robotType = getRobotType()
-    setRobotColor(robotType)
 end
 
 --[[
