@@ -1,6 +1,6 @@
 -- TODO clean requires
 require "src/RobotType"
-require "src/RoomDetection"
+require "src/Environment"
 require "src/MoveIntoRoom"
 require "src/TargetRoomFormation"
 require "src/EvaluateRoom"

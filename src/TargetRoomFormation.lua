@@ -2,7 +2,7 @@ require "src/Color"
 require "src/Messages"
 require "src/Movement"
 require "src/ObstacleAvoidance"
-require "src/RoomDetection"
+require "src/Environment"
 
 --[[
  Holds functions to organize robots inside a target room.

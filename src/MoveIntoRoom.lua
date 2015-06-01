@@ -1,5 +1,5 @@
 require "src/Movement"
-require "src/RoomDetection"
+require "src/Environment"
 require "src/Color"
 require "src/ObstacleAvoidance"
 
