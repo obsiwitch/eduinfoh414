@@ -15,7 +15,7 @@ function Evaluate.init()
      objects) for this number of steps, then we assume the score obtained is the
      correct one.
     --]]
-    local MAX_STEPS_NO_IMPROVEMENT = 25
+    local MAX_STEPS_NO_IMPROVEMENT = 10
     
     --- Private attributes
     
