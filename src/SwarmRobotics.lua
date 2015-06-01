@@ -6,6 +6,7 @@ require "src/TargetRoomFormation"
 require "src/EvaluateRoom"
 require "src/Gather"
 require "src/SynchronizeScores"
+require "src/BestRoomFormation"
 
 --[[
  Table listing the different states a robot can enter.
@@ -15,7 +16,7 @@ require "src/SynchronizeScores"
  * SPLIT_ROOMS: move into the nearest room
  * ROOM_FORMATION: group robots inside rooms between the light source and the
  door, and partially evaluate the room
- * GATHER: gather robots that have already evaluated their room, and share
+ * GATHER_SYNC: gather robots that have already evaluated their room, and share
  their score. Go towards the best room once it has been found.
  * BEST: move inside the best room
 --]]
@@ -24,7 +25,7 @@ local STATES = {
     INIT_SPLIT_ROOMS = 1,
     SPLIT_ROOMS = 2,
     ROOM_FORMATION = 3,
-    GATHER = 4,
+    GATHER_SYNC = 4,
     BEST = 5
 }
 
@@ -86,10 +87,10 @@ function step()
         if evalStatus.finished then
             Gather.init()
             Synchronize.init(robotType, evalStatus.partialScore, roomColor)
-            state = STATES.GATHER
+            state = STATES.GATHER_SYNC
         end
     
-    elseif (state == STATES.GATHER) then
+    elseif (state == STATES.GATHER_SYNC) then
         -- TODO clean
         local bestRoomColor = Synchronize.step()
         
@@ -106,6 +107,7 @@ function step()
                 
                 -- best room attained
                 if isInsideRoom then
+                    BestRoomFormation.init()
                     state = STATES.BEST
                 end
             end
@@ -114,18 +116,7 @@ function step()
         end
     
     elseif (state == STATES.BEST) then
-        local nearestLightSource = getNearestElement(LIGHT_SOURCE_COLOR)
-        if (nearestLightSource ~= nil and nearestLightSource.distance < 100) then
-            local speeds = computeSpeedsFromAngle(nearestLightSource.angle)
-            robot.wheels.set_velocity(speeds[1], speeds[2])
-        else
-            -- Go towards farthest robot. Trick to avoid problems when a lot of
-            -- robots swarm near the light source and make it invisible to far
-            -- robots. FIXME
-            local targetVector = Gather.computeTargetRobot()
-            local speeds = computeSpeedsFromAngle(targetVector.angle)
-            robot.wheels.set_velocity(speeds[1], speeds[2])
-        end
+        BestRoomFormation.step()
     end
 end
 

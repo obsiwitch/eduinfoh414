@@ -32,7 +32,7 @@ function Gather.init()
         robot.range_and_bearing.set_data(I_BYTE_PING, 1)
         
         -- target (farthest robot)
-        local targetVector = Gather.computeTargetRobot()
+        local targetVector = Gather.getFarthestRobot()
         
         -- escape vector (escape from obstacles)
         local escapeVector = getEscapeVector()
@@ -49,7 +49,7 @@ function Gather.init()
      Computes a vector in polar coordinates representing attraction towards the
      furthest robot.
     --]]
-    function Gather.computeTargetRobot()
+    function Gather.getFarthestRobot()
         local furthestRobot = { value = 0, angle = 0 }
         
         for _,v in ipairs(robot.colored_blob_omnidirectional_camera) do

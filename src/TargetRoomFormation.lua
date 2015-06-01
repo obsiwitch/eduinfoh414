@@ -82,13 +82,14 @@ end
  Computes a cylindrical coordinates vector representing attractions and
  repulsion between robots.
 --]]
-function computeRobotsInteraction()
+function computeRobotsInteraction(targetDistance)
+    targetDistance = targetDistance or TARGET_DIST
     local accumulator = { x = 0, y = 0 }
     
     for _,msg in ipairs(robot.range_and_bearing) do
         if msg.data[I_BYTE_PING] == 1 then
             local cartesianVector = cylindricalToCartesianCoords({
-                value = computeLennardJonesForce(msg.range),
+                value = computeLennardJonesForce(msg.range, targetDistance),
                 angle = msg.horizontal_bearing
             })
             
@@ -103,9 +104,9 @@ end
 --[[
  Computes the Lennard-Jones force.
 --]]
-function computeLennardJonesForce(distance)
+function computeLennardJonesForce(distance, targetDistance)
     return -4 * EPSILON/distance * (
-        math.pow(TARGET_DIST/distance, 4)
-        - math.pow(TARGET_DIST/distance, 2)
+        math.pow(targetDistance/distance, 4)
+        - math.pow(targetDistance/distance, 2)
     );
 end

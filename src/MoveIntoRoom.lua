@@ -78,16 +78,28 @@ function MoveIntoRoom.init(doorColor)
             end
             
         elseif (state == STATES.MOVE_INTO_ROOM) then
-            -- move towards the closest light source in order to move inside the
-            -- room
             local nearestLightSource = getNearestElement(LIGHT_SOURCE_COLOR)
-            if (nearestLightSource ~= nil) then
-                local speeds = computeSpeedsFromAngle(nearestLightSource.angle)
-                robot.wheels.set_velocity(speeds[1], speeds[2])
+            nearestLightSource = nearestLightSource or { distance = 0, angle = 0}
+            if (nearestLightSource.distance < 150) then
+                nearestLightSource.value = nearestLightSource.distance * 100
             else
-                local speeds = computeSpeedsFromAngle(targetDoor.angle)
-                robot.wheels.set_velocity(speeds[1], speeds[2])
+                nearestLightSource.value = 0
             end
+            
+            local nearestObject = getNearestElement(OBJECT_COLOR)
+            nearestObject = nearestObject or { distance = 0, angle = 0}
+            if (nearestObject.distance < 150) then
+                nearestObject.value = nearestObject.distance * 100
+            else
+                nearestObject.value = 0
+            end
+            
+            -- sum
+            local finalVector = headTailSumCylindricalVectors({
+                nearestLightSource, nearestObject
+            })
+            local speeds = computeSpeedsFromAngle(finalVector.angle)
+            robot.wheels.set_velocity(speeds[1], speeds[2])
             
             if (targetDoor.distance > DOOR_THRESHOLD) then
                 state = STATES.INSIDE
