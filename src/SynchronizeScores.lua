@@ -1,6 +1,5 @@
 require "src/Color"
 require "src/Messages"
-require "src/EvaluateRoom"
 
 Synchronize = {}
 
@@ -10,14 +9,21 @@ Synchronize = {}
 function Synchronize.init(robotType, partialScore, roomColor)
     --- Constants
     
+    --[[
+     If no improvement has been made to the scores for this number of steps,
+     then we assume the obtained scores are the correct one.
+    --]]
+    local MAX_STEPS_NO_IMPROVEMENT = 25
+    
     local STATES = {
-        SUM_PARTIAL = 0,
-        SYNC_TOTAL = 1
+        INIT_SYNC_PARTIAL = 0,
+        SUM_PARTIAL = 1,
+        SYNC_TOTAL = 2
     }
     
     --- Private attributes
     
-    local robotType = robotType -- FIXME useless?
+    local robotType = robotType
     local bestRoomColor = roomColor
     local bestRoomScore = 0
     
@@ -30,7 +36,10 @@ function Synchronize.init(robotType, partialScore, roomColor)
         partialScores.L = partialScore
     end
     
-    local state = STATES.SUM_PARTIAL
+    -- Number of steps during which no improvement has been made to the score.
+    local steps = 0
+    
+    local state = STATES.SYNC_PARTIAL
     
     --- Public methods
     
@@ -38,35 +47,67 @@ function Synchronize.init(robotType, partialScore, roomColor)
      TODO
     --]]
     function Synchronize.step()
-        if (state == STATES.SUM_PARTIAL) then
-            local sharedPartialScores = Evaluate.receivePartialScores(
-                bestRoomColor)
+        if (state == STATES.INIT_SYNC_PARTIAL) then
+            -- Share the current partial score one time
+            shareScore(roomColor, I_BYTE_PARTIAL[robotType], partialScore)
             
+            state = STATES.SYNC_PARTIAL
+        
+        elseif (state == STATES.SYNC_PARTIAL) then
+            local sharedPartialScores = Synchronize.receivePartialScores(bestRoomColor)
+            local partialScoreUpdated = (
+                (sharedPartialScores.L > partialScores.L) or
+                (sharedPartialScores.G > partialScores.G)
+            )
+            
+            -- partial score update
             partialScores.L = math.max(partialScores.L, sharedPartialScores.L)
             partialScores.G = math.max(partialScores.G, sharedPartialScores.G)
             
+            -- share partial score
+            shareScore(roomColor, I_BYTE_PARTIAL[robotType], partialScore)
+            
+            --[[
+            -- missing partial score
             -- FIXME approximation, the ground value could be 0
             local missingPartialG = (partialScores.G == 0)
             local missingPartialL = (partialScores.L == 0)
+            ]]
             
-            if (not missingPartialL) and (not missingPartialL) then
-                bestRoomScore = (partialScores.L + partialScores.G)/2
-                state = STATES.SYNC_TOTAL
-                
-                -- no partial score missing
-                robot.range_and_bearing.set_data(I_BYTE_EVAL_STATUS, 0)
-                
-                -- TODO return
+            --[[
+            -- share that a partial score is missing
+            -- TODO WIP
+            if missingPartialG then
+                robot.range_and_bearing.set_data(I_BYTE_EVAL_STATUS, 1)
             else
-                -- share that a partial score is missing
-                if missingPartialG then
-                    robot.range_and_bearing.set_data(I_BYTE_EVAL_STATUS, 1)
-                else
-                    robot.range_and_bearing.set_data(I_BYTE_EVAL_STATUS, 2)
-                end
-                
-                -- TODO return
+                robot.range_and_bearing.set_data(I_BYTE_EVAL_STATUS, 2)
             end
+            ]]
+            
+            -- steps counter update
+            --if (partialScoreUpdated or missingPartialL or missingPartialG) then
+            if partialScoreUpdated then
+                steps = 0
+            else
+                steps = steps + 1
+            end
+            
+            if (steps > MAX_STEPS_NO_IMPROVEMENT) then
+                state = STATES.SUM_PARTIAL
+            end
+            
+        elseif (state == STATES.SUM_PARTIAL) then
+            -- compute total score from both partial scores
+            bestRoomScore = (partialScores.L + partialScores.G)/2
+            
+            --[[
+            -- no partial score missing
+            robot.range_and_bearing.set_data(I_BYTE_EVAL_STATUS, 0)
+            --]]
+            
+            steps = 0
+            
+            state = STATES.SYNC_TOTAL
             
         elseif(state == STATES.SYNC_TOTAL) then
             -- retrieve and compare best score from neighbouring robots to
@@ -75,11 +116,22 @@ function Synchronize.init(robotType, partialScore, roomColor)
             if (sharedBestRoom.score > bestRoomScore) then
                 bestRoomScore = sharedBestRoom.score
                 bestRoomColor = sharedBestRoom.color
+                
+                steps = 0
+            else
+                steps = steps + 1
+            end
+            
+            if (steps > MAX_STEPS_NO_IMPROVEMENT) then
+                robot.leds.set_all_colors(EVALUATED.colorName)
+            else
+                robot.leds.set_all_colors(PARTIALLY_EVALUATED.colorName)
             end
             
             -- share current best score
             shareScore(bestRoomColor, I_BYTE_TOTAL, bestRoomScore)
             
+            --[[
             -- detect missing partial score
             local missingRoomColor = Synchronize.receiveMissingScoreNotif(
                 robotType)
@@ -90,10 +142,40 @@ function Synchronize.init(robotType, partialScore, roomColor)
             else
                 robot.leds.set_all_colors(EVALUATED.colorName)
             end
-            
-            -- TODO return
+            --]]
         end
         
+    end
+    
+    --[[
+     Receives partial scores (G and L). Returns the best received scores.
+     If a robotType is given in parameter, only return the best partial score for
+     this type of robot.
+    --]]
+    function Synchronize.receivePartialScores(roomColor, robotType)
+        local best = { L = 0, G = 0 }
+        
+        for _,msg in ipairs(robot.range_and_bearing) do
+            local msgRoomColor = Color.new({
+                red = msg.data[I_BYTE_RGB.R],
+                green = msg.data[I_BYTE_RGB.G],
+                blue = msg.data[I_BYTE_RGB.B]
+            })
+            
+            if Color.eq(roomColor, msgRoomColor) then
+                local tmpL = msg.data[I_BYTE_PARTIAL.L]
+                local tmpG = msg.data[I_BYTE_PARTIAL.G]
+                
+                best.L = math.max(best.L, tmpL)
+                best.G = math.max(best.G, tmpG)
+            end
+        end
+        
+        if (robotType == nil) then
+            return best
+        else
+            return best[robotType]
+        end
     end
     
     --[[

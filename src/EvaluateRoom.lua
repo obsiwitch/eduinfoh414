@@ -35,19 +35,12 @@ function Evaluate.init()
     --- Public methods
 
     --[[
-     Robots of both types evaluate ther room and share their partial score between
-     them. We assume the obtained score is correct if it has not been modified for
-     MAX_STEPS_NO_IMPROVEMENT.
+     Robots of both types evaluate their room. We assume the obtained score is
+     correct if it has not been modified for MAX_STEPS_NO_IMPROVEMENT.
     --]]
     function Evaluate.step(roomColor, robotType)
-        -- Local score
-        local localPartialScore = Evaluate.partial(roomColor, robotType)
-        
-        -- best received partial score from robots of the same type
-        local sharedPartialScore = Evaluate.receivePartialScores(
-            roomColor, robotType)
-        
-        local newPartialScore = math.max(localPartialScore, sharedPartialScore)
+        -- evaluate partial score
+        local newPartialScore = Evaluate.partial(roomColor, robotType)
         
         -- keep best partial score
         if (newPartialScore > partialScore) then
@@ -58,51 +51,18 @@ function Evaluate.init()
             steps = steps + 1
         end
         
-        -- share partial score
-        shareScore(roomColor, I_BYTE_PARTIAL[robotType], partialScore)
-        
         if (steps > MAX_STEPS_NO_IMPROVEMENT) then
             robot.leds.set_all_colors(PARTIALLY_EVALUATED.colorName)
             return {
                 finished = true,
                 partialScore = partialScore
             }
-        end
-        
-        return {
-            finished = false,
-            partialScore = partialScore
-        }
-    end
-    
-    --[[
-     Receives partial scores (G and L). Returns the best received scores.
-     If a robotType is given in parameter, only return the best partial score for
-     this type of robot.
-    --]]
-    function Evaluate.receivePartialScores(roomColor, robotType)
-        local best = { L = 0, G = 0 }
-        
-        for _,msg in ipairs(robot.range_and_bearing) do
-            local msgRoomColor = Color.new({
-                red = msg.data[I_BYTE_RGB.R],
-                green = msg.data[I_BYTE_RGB.G],
-                blue = msg.data[I_BYTE_RGB.B]
-            })
             
-            if Color.eq(roomColor, msgRoomColor) then
-                local tmpL = msg.data[I_BYTE_PARTIAL.L]
-                local tmpG = msg.data[I_BYTE_PARTIAL.G]
-                
-                best.L = math.max(best.L, tmpL)
-                best.G = math.max(best.G, tmpG)
-            end
-        end
-        
-        if (robotType == nil) then
-            return best
         else
-            return best[robotType]
+            return {
+                finished = false,
+                partialScore = partialScore
+            }
         end
     end
     
