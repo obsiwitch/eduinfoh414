@@ -34,22 +34,3 @@ I_BYTE_PARTIAL = {
  Index of the byte reserved for sharing a final score.
 --]]
 I_BYTE_TOTAL = 7
-
---[[
- Shares a score on the specified channel (scoreByte, use I_BYTE_PARTIAL.L,
- I_BYTE_PARTIAL.G or I_BYTE_TOTAL). The color of the room associated with the
- score is also sent (channel I_BYTE_RGB.R/.G/.B).
---]]
-function shareScore(roomColor, scoreByte, score)
-    robot.range_and_bearing.set_data(I_BYTE_RGB.R, roomColor.red)
-    robot.range_and_bearing.set_data(I_BYTE_RGB.G, roomColor.green)
-    robot.range_and_bearing.set_data(I_BYTE_RGB.B, roomColor.blue)
-    robot.range_and_bearing.set_data(scoreByte, score)
-end
-
---[[
- Converts a score in [0,1] to a value in [0,255].
---]]
-function convertScoreToByte(score)
-    return math.floor(255 * score)
-end

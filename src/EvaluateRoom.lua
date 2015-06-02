@@ -141,4 +141,13 @@ function Evaluate.init()
         
         return nObjects/12
     end
+    
+    -- Private methods
+    
+    --[[
+     Converts a score in [0,1] to a value in [0,255].
+    --]]
+    function convertScoreToByte(score)
+        return math.floor(255 * score)
+    end
 end

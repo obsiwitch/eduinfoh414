@@ -52,7 +52,7 @@ function Synchronize.init(partialScore, roomColor)
     function Synchronize.step()
         if (state == STATES.INIT_SYNC_PARTIAL) then
             -- Share the current partial score one time
-            shareScore(roomColor, I_BYTE_PARTIAL[Bot.type], partialScore)
+            Synchronize.shareScore(roomColor, I_BYTE_PARTIAL[Bot.type], partialScore)
             
             state = STATES.SYNC_PARTIAL
         
@@ -68,7 +68,7 @@ function Synchronize.init(partialScore, roomColor)
             partialScores.G = math.max(partialScores.G, sharedPartialScores.G)
             
             -- share partial score
-            shareScore(roomColor, I_BYTE_PARTIAL[Bot.type], partialScore)
+            Synchronize.shareScore(roomColor, I_BYTE_PARTIAL[Bot.type], partialScore)
             
             -- steps counter update
             if partialScoreUpdated then
@@ -103,7 +103,7 @@ function Synchronize.init(partialScore, roomColor)
             end
             
             -- share current best score
-            shareScore(bestRoomColor, I_BYTE_TOTAL, bestRoomScore)
+            Synchronize.shareScore(bestRoomColor, I_BYTE_TOTAL, bestRoomScore)
             
             if (steps > MAX_STEPS_NO_IMPROVEMENT) then
                 robot.leds.set_all_colors(EVALUATED.colorName)
@@ -186,5 +186,17 @@ function Synchronize.init(partialScore, roomColor)
         end
         
         return true
+    end
+    
+    --[[
+     Shares a score on the specified channel (scoreByte, use I_BYTE_PARTIAL.L,
+     I_BYTE_PARTIAL.G or I_BYTE_TOTAL). The color of the room associated with
+     the score is also sent (channel I_BYTE_RGB.R/.G/.B).
+    --]]
+    function Synchronize.shareScore(roomColor, scoreByte, score)
+        robot.range_and_bearing.set_data(I_BYTE_RGB.R, roomColor.red)
+        robot.range_and_bearing.set_data(I_BYTE_RGB.G, roomColor.green)
+        robot.range_and_bearing.set_data(I_BYTE_RGB.B, roomColor.blue)
+        robot.range_and_bearing.set_data(scoreByte, score)
     end
 end
