@@ -28,9 +28,6 @@ function Gather.init()
      TODO
     --]]
     function Gather.step()
-        -- share position to other robots
-        robot.range_and_bearing.set_data(I_BYTE_PING, 1)
-        
         -- target (farthest robot)
         local targetVector = Gather.getFarthestRobot()
         

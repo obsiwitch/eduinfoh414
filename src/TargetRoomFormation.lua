@@ -30,9 +30,6 @@ local EPSILON = 20
  the light source.
 --]]
 function stepTargetRoomFormation(robotType)
-    -- share position to other robots
-    robot.range_and_bearing.set_data(I_BYTE_PING, 1)
-    
     -- target vector (door or light source)
     local targetVector = computeTargetVector(robotType)
     
