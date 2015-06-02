@@ -36,25 +36,6 @@ I_BYTE_PARTIAL = {
 I_BYTE_TOTAL = 7
 
 --[[
- Receives Messages filtered by distance. If a received message comes from a
- robot positioned at a distance greater than the specificied threshold, this
- message is discarded.
---]]
-function receiveMessages(distanceThreshold)
-    local messages = {}
-    
-    for _,msg in ipairs(robot.range_and_bearing) do
-        local thresholdExceeded = (msg.range > distanceThreshold)
-            
-        if (not thresholdExceeded) then
-            table.insert(messages, msg)
-        end
-    end
-    
-    return messages
-end
-
---[[
  Shares a score on the specified channel (scoreByte, use I_BYTE_PARTIAL.L,
  I_BYTE_PARTIAL.G or I_BYTE_TOTAL). The color of the room associated with the
  score is also sent (channel I_BYTE_RGB.R/.G/.B).
