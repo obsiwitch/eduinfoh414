@@ -1,4 +1,4 @@
-require "src/Movement"
+require "src/VectorOps"
 
 --[[
  This file holds functions related to obstacle avoidance. The behaviour is the
@@ -41,6 +41,5 @@ end
 --]]
 function stepAvoid()
     local escapeVector = getEscapeVector()
-    local speeds = computeSpeedsFromAngle(escapeVector.angle)
-    robot.wheels.set_velocity(speeds[1], speeds[2])
+    Bot.goTowardsAngle(escapeVector.angle)
 end

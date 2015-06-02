@@ -1,4 +1,4 @@
-require "src/Movement"
+require "src/VectorOps"
 
 --[[
  Target distance between robots (cm). Used by the Lennard-Jones potential.
@@ -32,7 +32,7 @@ function computeRobotsInteraction(targetDistance)
         end
     end
     
-    return cartesianTopolarCoords(accumulator)
+    return cartesianToPolarCoords(accumulator)
 end
 
 --[[

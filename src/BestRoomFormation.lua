@@ -1,8 +1,9 @@
 require "src/Environment"
 require "src/Gather"
 require "src/RobotsInteraction"
-require "src/Movement"
+require "src/VectorOps"
 require "src/Color"
+require "src/Bot"
 
 BestRoomFormation = {}
 
@@ -47,7 +48,6 @@ function BestRoomFormation.init()
         local finalVector = headTailSumPolarVectors({
             nearestLightSource, nearestObject, robotsInteraction
         })
-        local speeds = computeSpeedsFromAngle(finalVector.angle)
-        robot.wheels.set_velocity(speeds[1], speeds[2])
+        Bot.goTowardsAngle(finalVector.angle)
     end
 end

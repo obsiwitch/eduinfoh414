@@ -1,12 +1,13 @@
 require "src/Color"
 require "src/Messages"
+require "src/Bot"
 
 Synchronize = {}
 
 --[[
  Initializes Synchronize singleton.
 --]]
-function Synchronize.init(robotType, partialScore, roomColor)
+function Synchronize.init(partialScore, roomColor)
     --- Constants
     
     --[[
@@ -23,12 +24,11 @@ function Synchronize.init(robotType, partialScore, roomColor)
     
     --- Private attributes
     
-    local robotType = robotType
     local bestRoomColor = roomColor
     local bestRoomScore = 0
     
     local partialScores = {}
-    if (robotType == "G") then
+    if (Bot.type == "G") then
         partialScores.G = partialScore
         partialScores.L = 0
     else
@@ -49,7 +49,7 @@ function Synchronize.init(robotType, partialScore, roomColor)
     function Synchronize.step()
         if (state == STATES.INIT_SYNC_PARTIAL) then
             -- Share the current partial score one time
-            shareScore(roomColor, I_BYTE_PARTIAL[robotType], partialScore)
+            shareScore(roomColor, I_BYTE_PARTIAL[Bot.type], partialScore)
             
             state = STATES.SYNC_PARTIAL
         
@@ -65,7 +65,7 @@ function Synchronize.init(robotType, partialScore, roomColor)
             partialScores.G = math.max(partialScores.G, sharedPartialScores.G)
             
             -- share partial score
-            shareScore(roomColor, I_BYTE_PARTIAL[robotType], partialScore)
+            shareScore(roomColor, I_BYTE_PARTIAL[Bot.type], partialScore)
             
             -- steps counter update
             if partialScoreUpdated then

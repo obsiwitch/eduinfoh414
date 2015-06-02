@@ -1,6 +1,7 @@
 require "src/Environment"
 require "src/Messages"
 require "src/Color"
+require "src/Bot"
 
 Evaluate = {}
 
@@ -38,9 +39,9 @@ function Evaluate.init()
      Robots of both types evaluate their room. We assume the obtained score is
      correct if it has not been modified for MAX_STEPS_NO_IMPROVEMENT.
     --]]
-    function Evaluate.step(roomColor, robotType)
+    function Evaluate.step(roomColor)
         -- evaluate partial score
-        local newPartialScore = Evaluate.partial(roomColor, robotType)
+        local newPartialScore = Evaluate.partial(roomColor)
         
         -- keep best partial score
         if (newPartialScore > partialScore) then
@@ -71,14 +72,14 @@ function Evaluate.init()
      * type G robots: ground
      * type L robots: light + objects
      
-     Returns the partial score for the specified type of robot in the [0,255]
+     Returns the partial score for the current type of robot in the [0,255]
      interval.
     --]]
-    function Evaluate.partial(roomColor, robotType)
-        if (robotType == "G") then
+    function Evaluate.partial(roomColor)
+        if (Bot.type == "G") then
             return convertScoreToByte(Evaluate.ground())
             
-        elseif (robotType == "L") then
+        elseif (Bot.type == "L") then
             return convertScoreToByte(
                 (Evaluate.light() + Evaluate.objects())/2
             )

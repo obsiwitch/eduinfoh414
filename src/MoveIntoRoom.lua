@@ -1,4 +1,4 @@
-require "src/Movement"
+require "src/VectorOps"
 require "src/Environment"
 require "src/Color"
 require "src/ObstacleAvoidance"
@@ -70,8 +70,7 @@ function MoveIntoRoom.init(doorColor)
         end
         
         if (state == STATES.DOOR_ATTRACTION) then
-            local speeds = computeSpeedsFromAngle(targetDoor.angle)
-            robot.wheels.set_velocity(speeds[1], speeds[2])
+            Bot.goTowardsAngle(targetDoor.angle)
             
             if (targetDoor.distance < DOOR_THRESHOLD) then
                 state = STATES.MOVE_INTO_ROOM
@@ -98,8 +97,7 @@ function MoveIntoRoom.init(doorColor)
             local finalVector = headTailSumPolarVectors({
                 nearestLightSource, nearestObject
             })
-            local speeds = computeSpeedsFromAngle(finalVector.angle)
-            robot.wheels.set_velocity(speeds[1], speeds[2])
+            Bot.goTowardsAngle(finalVector.angle)
             
             if (targetDoor.distance > DOOR_THRESHOLD) then
                 state = STATES.INSIDE

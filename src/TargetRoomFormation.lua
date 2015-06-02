@@ -1,9 +1,10 @@
 require "src/Color"
 require "src/Messages"
-require "src/Movement"
+require "src/VectorOps"
 require "src/ObstacleAvoidance"
 require "src/Environment"
 require "src/RobotsInteraction"
+require "src/Bot"
 
 --[[
  Holds functions to organize robots inside a target room.
@@ -18,9 +19,9 @@ require "src/RobotsInteraction"
  G robots will be attracted by the door, while L robots will be attracted by
  the light source.
 --]]
-function stepTargetRoomFormation(robotType)
+function stepTargetRoomFormation()
     -- target vector (door or light source)
-    local targetVector = computeTargetVector(robotType)
+    local targetVector = computeTargetVector()
     
     -- escape vector (escape from obstacles)
     local escapeVector = getEscapeVector()
@@ -32,17 +33,16 @@ function stepTargetRoomFormation(robotType)
     local finalVector = headTailSumPolarVectors({
         targetVector, escapeVector, robotsInteractionVector
     })
-    local speeds = computeSpeedsFromAngle(finalVector.angle)
-    robot.wheels.set_velocity(speeds[1], speeds[2])
+    Bot.goTowardsAngle(finalVector.angle)
 end
 
 --[[
- Computes the target vector depending on the robot's type.
+ Computes the target vector depending on the current robot's type.
  For a Ground type robot, the target is the door.
  For a Light type robot, the target is the light source.
 --]]
-function computeTargetVector(robotType)
-    if (robotType == "G") then
+function computeTargetVector()
+    if (Bot.type == "G") then
         local nearestDoor = getNearestDoor()
 
         return {
@@ -50,7 +50,7 @@ function computeTargetVector(robotType)
             angle = nearestDoor.angle
         }
         
-    elseif (robotType == "L") then
+    elseif (Bot.type == "L") then
         local nearestLightSource = getNearestElement(LIGHT_SOURCE_COLOR)
         
         if (nearestLightSource ~= nil) then

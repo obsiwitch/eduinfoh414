@@ -1,5 +1,5 @@
 -- TODO clean requires
-require "src/RobotType"
+require "src/Bot"
 require "src/Environment"
 require "src/MoveIntoRoom"
 require "src/TargetRoomFormation"
@@ -29,29 +29,14 @@ local STATES = {
     BEST = 5
 }
 
--- Current state
+-- current state
 local state
 
 --[[
- Current robot's type (G or L)
---]]
-local robotType
-
---[[
- Color of the room associated with this robot.
---]]
-local roomColor
-
---[[
- Enables the camera and initialize variables (i.e. state, robotType).
+ Initializes state machine & robot's variables.
 --]]
 function init()
-    robot.colored_blob_omnidirectional_camera.enable()
-    
-    robotType = getRobotType()
-    
-    -- share position to other robots
-    robot.range_and_bearing.set_data(I_BYTE_PING, 1)
+    Bot.init()
     
     state = STATES.START
 end
@@ -68,7 +53,8 @@ function step()
         state = STATES.INIT_SPLIT_ROOMS
         
     elseif (state == STATES.INIT_SPLIT_ROOMS) then
-        roomColor = MoveIntoRoom.initNearest()
+        local nearestRoomColor = MoveIntoRoom.initNearest()
+        Bot.roomColor = nearestRoomColor
         state = STATES.SPLIT_ROOMS
         
     elseif (state == STATES.SPLIT_ROOMS) then
@@ -80,12 +66,12 @@ function step()
         end
     
     elseif (state == STATES.ROOM_FORMATION) then
-        stepTargetRoomFormation(robotType)
-        local evalStatus = Evaluate.step(roomColor, robotType)
+        stepTargetRoomFormation()
+        local evalStatus = Evaluate.step(Bot.roomColor)
         
         if evalStatus.finished then
             Gather.init()
-            Synchronize.init(robotType, evalStatus.partialScore, roomColor)
+            Synchronize.init(evalStatus.partialScore, Bot.roomColor)
             state = STATES.GATHER_SYNC
         end
     
@@ -94,10 +80,10 @@ function step()
         
         -- Check if all neighbouring robots have totally evaluated their room
         if bestRoomColor ~= nil and Synchronize.checkEvalStatusRobots() then
-            if not Color.eq(bestRoomColor, roomColor) then
+            if not Color.eq(bestRoomColor, Bot.roomColor) then
                 -- new best room found
-                roomColor = bestRoomColor
-                MoveIntoRoom.init(roomColor)
+                Bot.roomColor = bestRoomColor
+                MoveIntoRoom.init(bestRoomColor)
             else
                 -- go towards best room
                 local isInsideRoom = MoveIntoRoom.step()

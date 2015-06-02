@@ -1,5 +1,4 @@
 require "src/Color"
-require "src/RobotType"
 
 --[[
  List of colors which are assigned for elements which are not doors (i.e. green
