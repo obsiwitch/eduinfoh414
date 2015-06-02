@@ -94,8 +94,7 @@ function step()
         -- TODO clean
         local bestRoomColor = Synchronize.step()
         
-        -- Check if best room found and if some robots are missing values to
-        -- evaluate their room
+        -- Check if all neighbouring robots have totally evaluated their room
         if bestRoomColor ~= nil and Synchronize.checkEvalStatusRobots() then
             if not Color.eq(bestRoomColor, roomColor) then
                 -- new best room found

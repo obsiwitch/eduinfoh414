@@ -36,15 +36,6 @@ I_BYTE_PARTIAL = {
 I_BYTE_TOTAL = 7
 
 --[[
- Index of the byte reserver for notifying other robots that the room
- identified by I_BYTE_RGB is missing a partial score evaluation.
- * 0: no missing value
- * 1: missing G value
- * 2: missing L value
---]]
-I_BYTE_EVAL_STATUS = 8
-
---[[
  Receives Messages filtered by distance. If a received message comes from a
  robot positioned at a distance greater than the specificied threshold, this
  message is discarded.

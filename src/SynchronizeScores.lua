@@ -67,25 +67,7 @@ function Synchronize.init(robotType, partialScore, roomColor)
             -- share partial score
             shareScore(roomColor, I_BYTE_PARTIAL[robotType], partialScore)
             
-            --[[
-            -- missing partial score
-            -- FIXME approximation, the ground value could be 0
-            local missingPartialG = (partialScores.G == 0)
-            local missingPartialL = (partialScores.L == 0)
-            ]]
-            
-            --[[
-            -- share that a partial score is missing
-            -- TODO WIP
-            if missingPartialG then
-                robot.range_and_bearing.set_data(I_BYTE_EVAL_STATUS, 1)
-            else
-                robot.range_and_bearing.set_data(I_BYTE_EVAL_STATUS, 2)
-            end
-            ]]
-            
             -- steps counter update
-            --if (partialScoreUpdated or missingPartialL or missingPartialG) then
             if partialScoreUpdated then
                 steps = 0
             else
@@ -99,11 +81,6 @@ function Synchronize.init(robotType, partialScore, roomColor)
         elseif (state == STATES.SUM_PARTIAL) then
             -- compute total score from both partial scores
             bestRoomScore = (partialScores.L + partialScores.G)/2
-            
-            --[[
-            -- no partial score missing
-            robot.range_and_bearing.set_data(I_BYTE_EVAL_STATUS, 0)
-            --]]
             
             steps = 0
             
@@ -132,21 +109,6 @@ function Synchronize.init(robotType, partialScore, roomColor)
                 robot.leds.set_all_colors(PARTIALLY_EVALUATED.colorName)
                 return nil
             end
-            
-
-            
-            --[[
-            -- detect missing partial score
-            local missingRoomColor = Synchronize.receiveMissingScoreNotif(
-                robotType)
-            if (missingRoomColor ~= nil) then
-                log(missingRoomColor.rgb)
-                -- TODO do something with the returned missingRoomColor
-                robot.leds.set_all_colors(PARTIALLY_EVALUATED.colorName)
-            else
-                robot.leds.set_all_colors(EVALUATED.colorName)
-            end
-            --]]
         end
         
         return nil
@@ -206,29 +168,6 @@ function Synchronize.init(robotType, partialScore, roomColor)
         end
         
         return best
-    end
-    
-    --[[
-     Receives notification that there is a missing partial score.
-     Returns the room color associated with the notification. Only returns
-     notifications concerning a robot of opposite to the current one.
-    --]]
-    function Synchronize.receiveMissingScoreNotif(robotType)
-        for _,msg in ipairs(robot.range_and_bearing) do
-            local msgRoomColor = Color.new({
-                red = msg.data[I_BYTE_RGB.R],
-                green = msg.data[I_BYTE_RGB.G],
-                blue = msg.data[I_BYTE_RGB.B]
-            })
-            
-            if (msg.data[I_BYTE_EVAL_STATUS] == 1 and robotType == "L") or
-               (msg.data[I_BYTE_EVAL_STATUS] == 2 and robotType == "G")
-            then
-                return msgRoomColor
-            end
-        end
-        
-        return nil
     end
     
     --[[
