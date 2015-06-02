@@ -13,7 +13,7 @@ function BestRoomFormation.init()
     --[[ maximum distance allowed for accepting elements (i.e. light source,
      objects) as anchors for the robots.
     --]]
-    local MAX_DIST_ELEMENTS = 150
+    local MAX_DIST_ELEMENTS = 200
     
     --- Public methods
     
@@ -23,8 +23,6 @@ function BestRoomFormation.init()
      
      Forces order:
      F_nearestLightSource > F_nearestObject > F_farthestRobot > F_robotsInteraction
-     
-     FIXME robots wandering outside the room
     --]]
     function BestRoomFormation.step()
         local nearestLightSource = getNearestElement(LIGHT_SOURCE_COLOR)
@@ -36,25 +34,18 @@ function BestRoomFormation.init()
         end
         
         local nearestObject = getNearestElement(OBJECT_COLOR)
-        nearestObject = nearestObject or { distance = 0, angle = 0}
+        local nearestObject = nearestObject or { distance = 0, angle = 0}
         if (nearestObject.distance < MAX_DIST_ELEMENTS) then
             nearestObject.value = nearestObject.distance * 10
         else
             nearestObject.value = 0
         end
         
-        local farthestRobot = Gather.getFarthestRobot()
-        
-        -- Additionally to the farthestRobot vector, compute the
-        -- robotsInteraction vector in order to bind robots using the
-        -- range_and_bearing system. Prevents problems that occurs sometimes
-        -- when the previous elements are not detected by the camera.
         local robotsInteraction = computeRobotsInteraction()
         
         -- sum
         local finalVector = headTailSumCylindricalVectors({
-            nearestLightSource, nearestObject, robotsInteraction, farthestRobot
-            --farthestRobot
+            nearestLightSource, nearestObject, robotsInteraction
         })
         local speeds = computeSpeedsFromAngle(finalVector.angle)
         robot.wheels.set_velocity(speeds[1], speeds[2])

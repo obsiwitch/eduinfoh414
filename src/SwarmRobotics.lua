@@ -90,7 +90,6 @@ function step()
         end
     
     elseif (state == STATES.GATHER_SYNC) then
-        -- TODO clean
         local bestRoomColor = Synchronize.step()
         
         -- Check if all neighbouring robots have totally evaluated their room
