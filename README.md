@@ -5,7 +5,7 @@
 ~~~
 > mkdir build
 > cd build
-> cmake -DCMAKE_BUILD_TYPE=Release ../src
+> cmake -DCMAKE_BUILD_TYPE=Release ../src/decision_making
 > make
 > cd ..
 > source variables
