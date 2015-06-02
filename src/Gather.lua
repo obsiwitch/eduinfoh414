@@ -1,6 +1,7 @@
 require "src/Messages"
 require "src/Movement"
 require "src/ObstacleAvoidance"
+require "src/RobotsInteraction"
 
 Gather = {}
 
@@ -34,9 +35,12 @@ function Gather.init()
         -- escape vector (escape from obstacles)
         local escapeVector = getEscapeVector()
         
+        -- robots interaction (avoid blocking other robots)
+        local robotsInteraction = computeRobotsInteraction()
+        
         -- sum
         local finalVector = headTailSumCylindricalVectors({
-            targetVector, escapeVector
+            targetVector, escapeVector, robotsInteraction
         })
         local speeds = computeSpeedsFromAngle(finalVector.angle)
         robot.wheels.set_velocity(speeds[1], speeds[2])
