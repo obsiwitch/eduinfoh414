@@ -1,5 +1,4 @@
 require "src/Color"
-require "src/Messages"
 require "src/VectorOps"
 require "src/ObstacleAvoidance"
 require "src/Environment"

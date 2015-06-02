@@ -1,7 +1,7 @@
 require "src/Color"
 
 --[[
- Functions related to sending and receiving messages.
+ Bytes used to send messages.
 --]]
 
 --[[
@@ -9,7 +9,7 @@ require "src/Color"
  by robots to notify their position. The position received from other robots is
  then used to compute the robots interaction vector.
  
- @see TargetRoomFormation
+ @see RobotsInteraction
 --]]
 I_BYTE_PING = 1
 

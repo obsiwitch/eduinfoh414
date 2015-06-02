@@ -1,4 +1,3 @@
-require "src/Messages"
 require "src/VectorOps"
 require "src/ObstacleAvoidance"
 require "src/RobotsInteraction"

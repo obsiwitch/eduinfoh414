@@ -1,3 +1,4 @@
+require "src/MsgBytes"
 require "src/VectorOps"
 
 --[[

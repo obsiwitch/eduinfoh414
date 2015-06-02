@@ -1,5 +1,5 @@
 require "src/Color"
-require "src/Messages"
+require "src/MsgBytes"
 require "src/Bot"
 
 Synchronize = {}

@@ -1,5 +1,4 @@
 require "src/Environment"
-require "src/Messages"
 require "src/Color"
 require "src/Bot"
 
