@@ -39,7 +39,7 @@ function Gather.init()
         local robotsInteraction = computeRobotsInteraction()
         
         -- sum
-        local finalVector = headTailSumCylindricalVectors({
+        local finalVector = headTailSumPolarVectors({
             targetVector, escapeVector, robotsInteraction
         })
         local speeds = computeSpeedsFromAngle(finalVector.angle)

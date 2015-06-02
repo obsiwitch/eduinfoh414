@@ -13,11 +13,11 @@ require "src/Movement"
 local OBSTACLE_VALUE_THRESHOLD = 0.2
 
 --[[
- Each proximity readings, in cylindrical coordinates, are treated as a vector.
+ Each proximity readings, in polar coordinates, are treated as a vector.
  Return the sum of these vectors (adde head to tail).
 --]]
 function getObstacleVector(proximityTable)
-    return headTailSumCylindricalVectors(proximityTable)
+    return headTailSumPolarVectors(proximityTable)
 end
 
 --[[

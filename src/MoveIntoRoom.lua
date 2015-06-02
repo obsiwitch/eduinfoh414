@@ -95,7 +95,7 @@ function MoveIntoRoom.init(doorColor)
             end
             
             -- sum
-            local finalVector = headTailSumCylindricalVectors({
+            local finalVector = headTailSumPolarVectors({
                 nearestLightSource, nearestObject
             })
             local speeds = computeSpeedsFromAngle(finalVector.angle)

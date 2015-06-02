@@ -22,7 +22,7 @@ function computeRobotsInteraction(targetDistance)
     
     for _,msg in ipairs(robot.range_and_bearing) do
         if msg.data[I_BYTE_PING] == 1 then
-            local cartesianVector = cylindricalToCartesianCoords({
+            local cartesianVector = polarToCartesianCoords({
                 value = computeLennardJonesForce(msg.range, targetDistance),
                 angle = msg.horizontal_bearing
             })
@@ -32,7 +32,7 @@ function computeRobotsInteraction(targetDistance)
         end
     end
     
-    return cartesianTocylindricalCoords(accumulator)
+    return cartesianTopolarCoords(accumulator)
 end
 
 --[[

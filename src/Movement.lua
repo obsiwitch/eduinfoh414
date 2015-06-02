@@ -12,9 +12,9 @@ local K_PROP = 20;
 local WHEELS_DISTANCE = 0.14;
 
 --[[
- Converts cylindrical coordinates to cartesian coordinates.
+ Converts polar coordinates to cartesian coordinates.
 --]]
-function cylindricalToCartesianCoords(cartesianCoords)
+function polarToCartesianCoords(cartesianCoords)
     return {
         x = cartesianCoords.value * math.cos(cartesianCoords.angle),
         y = cartesianCoords.value * math.sin(cartesianCoords.angle)
@@ -22,12 +22,12 @@ function cylindricalToCartesianCoords(cartesianCoords)
 end
 
 --[[
- Converts cartesian coordinates to cylindrical coordinates.
+ Converts cartesian coordinates to polar coordinates.
 --]]
-function cartesianTocylindricalCoords(cylindricalCoords)
+function cartesianTopolarCoords(polarCoords)
     return {
-        value = math.sqrt(cylindricalCoords.x^2 + cylindricalCoords.y^2),
-        angle = math.atan2(cylindricalCoords.y, cylindricalCoords.x)
+        value = math.sqrt(polarCoords.x^2 + polarCoords.y^2),
+        angle = math.atan2(polarCoords.y, polarCoords.x)
     }
 end
 
@@ -66,36 +66,36 @@ function computeSpeedsFromAngle(angle)
 end
 
 --[[
- Compute the opposite vector from a vector in cylindrical coordinates.
+ Compute the opposite vector from a vector in polar coordinates.
 --]]
-function computeOppositeVector(cylindricalVector)
+function computeOppositeVector(polarVector)
     local oppositeAngle
-    if (cylindricalVector.angle > 0) then
-        oppositeAngle = cylindricalVector.angle - math.pi
+    if (polarVector.angle > 0) then
+        oppositeAngle = polarVector.angle - math.pi
     else
-        oppositeAngle = cylindricalVector.angle + math.pi
+        oppositeAngle = polarVector.angle + math.pi
     end
     
     return {
-        value = cylindricalVector.value,
+        value = polarVector.value,
         angle = oppositeAngle
     }
 end
 
 --[[
- Sum cylindrical vectors head to tail.
+ Sum polar vectors head to tail.
  Converts the 2 vectors into cartesian coordinates, sum them and convert them
- back to cylindrical coordinates.
+ back to polar coordinates.
 --]]
-function headTailSumCylindricalVectors(vectors)
+function headTailSumPolarVectors(vectors)
     local accumulator = { x = 0, y = 0 }
     
     for _,v in ipairs(vectors) do
-        local vXY = cylindricalToCartesianCoords(v)
+        local vXY = polarToCartesianCoords(v)
         
         accumulator.x = accumulator.x + vXY.x
         accumulator.y = accumulator.y + vXY.y
     end
     
-    return cartesianTocylindricalCoords(accumulator)
+    return cartesianTopolarCoords(accumulator)
 end

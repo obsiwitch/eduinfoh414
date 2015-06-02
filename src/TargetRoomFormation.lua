@@ -29,7 +29,7 @@ function stepTargetRoomFormation(robotType)
     local robotsInteractionVector = computeRobotsInteraction()
     
     -- sum
-    local finalVector = headTailSumCylindricalVectors({
+    local finalVector = headTailSumPolarVectors({
         targetVector, escapeVector, robotsInteractionVector
     })
     local speeds = computeSpeedsFromAngle(finalVector.angle)
