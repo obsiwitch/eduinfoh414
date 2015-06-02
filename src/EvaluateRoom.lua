@@ -129,7 +129,11 @@ function Evaluate.init()
             local vColor = Color.new(v.color)
             local isObject = Color.eq(vColor, OBJECT_COLOR)
             
-            if (isObject and elementInTargetRoom(v, nearestDoor)) then
+            -- The element is considered inside the room if it is contained in
+            -- the circle of radisu 3m with center the current robot.
+            local elementInRoomApprox = (v.distance <= 300)
+            
+            if (isObject and elementInRoomApprox) then
                 nObjects = nObjects + 1
             end
         end

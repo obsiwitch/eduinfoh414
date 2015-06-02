@@ -96,33 +96,3 @@ function getDoor(roomColor)
     
     return nil
 end
-
---[[
- Returns whether the specified element is contained in the target room or not.
- The nearest door is used as a reference to determine the limit of the room.
- 
- @note This function will only work as intended in a target room, because this
- type of room only has one door. It will not work if it is used in the central
- room.
---]]
-function elementInTargetRoom(element, nearestDoor)
-    local elementIsBehindRobot = targetIsBehindRobot(element.angle)
-    local doorIsBehindRobot = targetIsBehindRobot(nearestDoor.angle)
-    
-    local elementXY = cylindricalToCartesianCoords({
-        value = element.distance,
-        angle = element.angle
-    })
-    
-    local doorXY = cylindricalToCartesianCoords({
-        value = nearestDoor.distance,
-        angle = nearestDoor.angle
-    })
-    
-    return (
-        (doorIsBehindRobot and not elementIsBehindRobot) or
-        (not doorIsBehindRobot and elementIsBehindRobot) or
-        (doorIsBehindRobot and (doorXY.x < elementXY.x)) or
-        (not doorIsBehindRobot and (elementXY.x < doorXY.x))
-    )
-end
