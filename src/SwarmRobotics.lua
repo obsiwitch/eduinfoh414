@@ -8,18 +8,6 @@ require "src/Gather"
 require "src/SynchronizeScores"
 require "src/BestRoomFormation"
 
---[[
- Table listing the different states a robot can enter.
- * START
- * INIT_SPLIT_ROOMS: initializes the MoveIntoRoom state machine with the nearest
- room
- * SPLIT_ROOMS: move into the nearest room
- * ROOM_FORMATION: group robots inside rooms between the light source and the
- door, and partially evaluate the room
- * GATHER_SYNC: gather robots that have already evaluated their room, and share
- their score. Go towards the best room once it has been found.
- * BEST: move inside the best room
---]]
 local STATES = {
     START = 0,
     INIT_SPLIT_ROOMS = 1,
@@ -46,17 +34,19 @@ end
  @see STATES
 --]]
 function step()
+    -- Wait one time step before starting. This is done in order to avoid a
+    -- problem with the camera (returned distances during the first time
+    -- step are not correct).
     if (state == STATES.START) then
-        -- Wait one time step before starting. This is done in order to avoid a
-        -- problem with the camera (returned distances during the first time
-        -- step are not correct).
         state = STATES.INIT_SPLIT_ROOMS
-        
+    
+    -- Initialize the MoveIntoRoom state machine with the nearest room.
     elseif (state == STATES.INIT_SPLIT_ROOMS) then
         local nearestRoomColor = MoveIntoRoom.initNearest()
         Bot.roomColor = nearestRoomColor
         state = STATES.SPLIT_ROOMS
-        
+    
+    -- Robots move into the nearest room.
     elseif (state == STATES.SPLIT_ROOMS) then
         local isInsideRoom = MoveIntoRoom.step()
 
@@ -65,6 +55,8 @@ function step()
             state = STATES.ROOM_FORMATION
         end
     
+    -- Group robots inside rooms between the light source and the
+    -- door, and partially evaluate the room.
     elseif (state == STATES.ROOM_FORMATION) then
         stepTargetRoomFormation()
         local evalStatus = Evaluate.step(Bot.roomColor)
@@ -75,6 +67,8 @@ function step()
             state = STATES.GATHER_SYNC
         end
     
+    -- Synchronize scores and move towards the best room once it has been
+    -- picked.
     elseif (state == STATES.GATHER_SYNC) then
         local bestRoomColor = Synchronize.step()
         
@@ -98,6 +92,8 @@ function step()
             Gather.step()
         end
     
+    -- Enter the best room and stay in it (robots are attracted by objects
+    -- inside the room).
     elseif (state == STATES.BEST) then
         BestRoomFormation.step()
     end
