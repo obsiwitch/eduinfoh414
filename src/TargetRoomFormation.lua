@@ -3,24 +3,13 @@ require "src/Messages"
 require "src/Movement"
 require "src/ObstacleAvoidance"
 require "src/Environment"
+require "src/RobotsInteraction"
 
 --[[
  Holds functions to organize robots inside a target room.
  The main ideas for pattern formation were seen in class during the 4th
  exercise.
 --]]
-
---[[
- Target distance between robots (cm). Used by the Lennard-Jones potential.
---]]
-local TARGET_DIST = 50
-
---[[
- Well depth, the deeper, the stronger the interaction.
- Increasing this coefficient increases the repulsion/attraction of the
- Lennard-Jones force.
---]]
-local EPSILON = 20
 
 --[[
  This function should be used when robots are already inside a target room.
@@ -73,37 +62,4 @@ function computeTargetVector(robotType)
     end
     
     return { value = 0, angle = 0 }
-end
-
---[[
- Computes a cylindrical coordinates vector representing attractions and
- repulsion between robots.
---]]
-function computeRobotsInteraction(targetDistance)
-    targetDistance = targetDistance or TARGET_DIST
-    local accumulator = { x = 0, y = 0 }
-    
-    for _,msg in ipairs(robot.range_and_bearing) do
-        if msg.data[I_BYTE_PING] == 1 then
-            local cartesianVector = cylindricalToCartesianCoords({
-                value = computeLennardJonesForce(msg.range, targetDistance),
-                angle = msg.horizontal_bearing
-            })
-            
-            accumulator.x = accumulator.x + cartesianVector.x
-            accumulator.y = accumulator.y + cartesianVector.y
-        end
-    end
-    
-    return cartesianTocylindricalCoords(accumulator)
-end
-
---[[
- Computes the Lennard-Jones force.
---]]
-function computeLennardJonesForce(distance, targetDistance)
-    return -4 * EPSILON/distance * (
-        math.pow(targetDistance/distance, 4)
-        - math.pow(targetDistance/distance, 2)
-    );
 end

@@ -1,6 +1,6 @@
 require "src/Environment"
 require "src/Gather"
-require "src/TargetRoomFormation"
+require "src/RobotsInteraction"
 require "src/Movement"
 require "src/Color"
 
@@ -9,9 +9,6 @@ BestRoomFormation = {}
 -- Initializes BestRoomFormation singleton.
 function BestRoomFormation.init()
     --- Constants
-    
-    -- target distance to compute robots interaction
-    local TARGET_DIST = 20
     
     --[[ maximum distance allowed for accepting elements (i.e. light source,
      objects) as anchors for the robots.
@@ -26,6 +23,8 @@ function BestRoomFormation.init()
      
      Forces order:
      F_nearestLightSource > F_nearestObject > F_farthestRobot > F_robotsInteraction
+     
+     FIXME robots wandering outside the room
     --]]
     function BestRoomFormation.step()
         local nearestLightSource = getNearestElement(LIGHT_SOURCE_COLOR)
@@ -50,7 +49,7 @@ function BestRoomFormation.init()
         -- robotsInteraction vector in order to bind robots using the
         -- range_and_bearing system. Prevents problems that occurs sometimes
         -- when the previous elements are not detected by the camera.
-        local robotsInteraction = computeRobotsInteraction(TARGET_DIST)
+        local robotsInteraction = computeRobotsInteraction()
         
         -- sum
         local finalVector = headTailSumCylindricalVectors({
