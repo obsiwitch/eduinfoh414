@@ -12,16 +12,3 @@ function getRobotType()
         return "L"
     end
 end
-
---[[
- Sets the robot's color depending on its type.
- * type G: yellow
- * type L: cyan
---]]
-function setRobotColor(robotType)
-    if (robotType == "G") then
-        robot.leds.set_all_colors(G_ROBOT_COLOR.colorName)
-    elseif (robotType == "L") then
-        robot.leds.set_all_colors(L_ROBOT_COLOR.colorName)
-    end
-end

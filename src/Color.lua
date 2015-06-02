@@ -28,16 +28,6 @@ OBJECT_COLOR = Color.new(
     "green"
 )
 
-G_ROBOT_COLOR = Color.new(
-    { red = 255, green = 255, blue = 255 },
-    "white"
-)
-
-L_ROBOT_COLOR = Color.new(
-    { red = 0, green = 255, blue = 255},
-    "cyan"
-)
-
 NOT_EVALUATED = Color.new(
     { red = 0, green = 0, blue = 0 },
     "black"

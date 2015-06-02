@@ -11,9 +11,9 @@ require "src/RobotType"
 NOT_DOORS_COLORS = {
     [LIGHT_SOURCE_COLOR.rgb] = true,
     [OBJECT_COLOR.rgb] = true,
-    [G_ROBOT_COLOR.rgb] = true,
-    [L_ROBOT_COLOR.rgb] = true,
-    [NOT_EVALUATED.rgb] = true
+    [NOT_EVALUATED.rgb] = true,
+    [PARTIALLY_EVALUATED.rgb] = true,
+    [EVALUATED.rgb] = true
 }
 
 --[[
