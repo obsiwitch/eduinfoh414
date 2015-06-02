@@ -26,7 +26,7 @@ function Gather.init()
     -- Public methods
     
     --[[
-     TODO
+     Gather robots to easily exchange information.
     --]]
     function Gather.step()
         -- target (farthest robot)

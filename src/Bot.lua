@@ -61,6 +61,9 @@ function Bot.init()
     
     --[[ Public methods ]]
     
+    --[[
+     Move the robot in direction pointed by the angle.
+    --]]
     function Bot.goTowardsAngle(angle)
         local speeds = computeSpeedsFromAngle(angle)
         robot.wheels.set_velocity(speeds[1], speeds[2])

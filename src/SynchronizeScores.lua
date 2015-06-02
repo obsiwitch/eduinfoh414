@@ -44,7 +44,10 @@ function Synchronize.init(partialScore, roomColor)
     --- Public methods
     
     --[[
-     TODO
+     Synchronize scores:
+     1) share and retrieve partial scores for the robot's associated room
+     2) sum partial scores to obtain total score
+     3) share, retrieve and keep the best score
     --]]
     function Synchronize.step()
         if (state == STATES.INIT_SYNC_PARTIAL) then
