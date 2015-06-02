@@ -32,10 +32,11 @@ function cartesianTocylindricalCoords(cylindricalCoords)
 end
 
 --[[
- Determines whether the target is behind the robot or not.
+ Determines whether the target is behind the robot (angle in [-pi/3 ; pi/3])
+ or not.
 --]]
 function targetIsBehindRobot(targetAngle)
-    return (targetAngle > math.pi/2 or targetAngle < -math.pi/2)
+    return (targetAngle > math.pi/3 or targetAngle < -math.pi/3)
 end
 
 --[[
