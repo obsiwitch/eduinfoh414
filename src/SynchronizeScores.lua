@@ -8,7 +8,7 @@ Synchronize = {}
  Initializes Synchronize singleton.
 --]]
 function Synchronize.init(partialScore, roomColor)
-    --- Constants
+    --[[ Constants ]]
     
     --[[
      If no improvement has been made to the scores for this number of steps,
@@ -22,7 +22,7 @@ function Synchronize.init(partialScore, roomColor)
         SYNC_TOTAL = 2
     }
     
-    --- Private attributes
+    --[[ Private attributes ]]
     
     local bestRoomColor = roomColor
     local bestRoomScore = 0
@@ -41,7 +41,7 @@ function Synchronize.init(partialScore, roomColor)
     
     local state = STATES.SYNC_PARTIAL
     
-    --- Public methods
+    --[[ Public methods ]]
     
     --[[
      Synchronize scores:

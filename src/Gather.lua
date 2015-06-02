@@ -8,7 +8,7 @@ Gather = {}
  Initializes the Gather singleton.
 --]]
 function Gather.init()
-    -- Constants
+    --[[ Constants ]]
     
     --[[
      Target distance between robots (cm).
@@ -22,7 +22,7 @@ function Gather.init()
     --]]
     local EPSILON = 20
     
-    -- Public methods
+    --[[ Public methods ]]
     
     --[[
      Gather robots to easily exchange information.

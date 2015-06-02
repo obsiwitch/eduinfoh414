@@ -9,14 +9,14 @@ BestRoomFormation = {}
 
 -- Initializes BestRoomFormation singleton.
 function BestRoomFormation.init()
-    --- Constants
+    --[[ Constants ]]
     
     --[[ maximum distance allowed for accepting elements (i.e. light source,
      objects) as anchors for the robots.
     --]]
     local MAX_DIST_ELEMENTS = 200
     
-    --- Public methods
+    --[[ Public methods ]]
     
     --[[
      Robots enter the best room and stay in it by being attracted by various

@@ -27,7 +27,7 @@ end
  Initializes the MoveIntoRoom state machine (singleton).
 --]]
 function MoveIntoRoom.init(doorColor)
-    -- Constants
+    --[[ Constants ]]
     
     local STATES = {
         DOOR_ATTRACTION = 0,
@@ -41,7 +41,7 @@ function MoveIntoRoom.init(doorColor)
     --]]
     local DOOR_THRESHOLD = 20
     
-    -- Private attributes
+    --[[ Private attributes ]]
     
     -- Current state
     local state = STATES.DOOR_ATTRACTION
@@ -49,7 +49,7 @@ function MoveIntoRoom.init(doorColor)
     -- Door corresponding to the room to move into
     local targetDoorColor = doorColor
     
-    -- public methods
+    --[[ public methods ]]
     
     --[[
      Step function to move a robot to the specified room.

@@ -8,7 +8,7 @@ Evaluate = {}
  Initializes the Evaluate singleton.
 --]]
 function Evaluate.init()
-    --- Constants
+    --[[ Constants ]]
     
     --[[
      If no improvement has been made to the partial score (ground or light +
@@ -17,7 +17,7 @@ function Evaluate.init()
     --]]
     local MAX_STEPS_NO_IMPROVEMENT = 10
     
-    --- Private attributes
+    --[[ Private attributes ]]
     
     --[[
      Number of steps during which no improvement has been made to the partial score
@@ -27,12 +27,12 @@ function Evaluate.init()
     
     local partialScore = 0
     
-    --- Additional initialization instructions
+    --[[ Additional initialization instructions]]
     
     -- The room is not evaluated yet
     robot.leds.set_all_colors(NOT_EVALUATED.colorName)
     
-    --- Public methods
+    --[[ Public methods ]]
 
     --[[
      Robots of both types evaluate their room. We assume the obtained score is
@@ -141,7 +141,7 @@ function Evaluate.init()
         return nObjects/12
     end
     
-    -- Private methods
+    --[[ Private methods ]]
     
     --[[
      Converts a score in [0,1] to a value in [0,255].
