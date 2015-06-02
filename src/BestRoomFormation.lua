@@ -1,5 +1,4 @@
 require "src/Environment"
-require "src/Gather"
 require "src/RobotsInteraction"
 require "src/VectorOps"
 require "src/Color"

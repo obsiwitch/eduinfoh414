@@ -1,6 +1,5 @@
--- TODO clean requires
 require "src/Bot"
-require "src/Environment"
+require "src/Color"
 require "src/MoveIntoRoom"
 require "src/TargetRoomFormation"
 require "src/EvaluateRoom"

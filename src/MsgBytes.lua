@@ -1,5 +1,3 @@
-require "src/Color"
-
 --[[
  Bytes used to send messages.
 --]]
