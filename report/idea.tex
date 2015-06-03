@@ -21,15 +21,30 @@ the states of the main controller, \hl{SwarmRobotics.lua}).
 
 \subsection{Implementation details}
 
-
 \subsubsection{MoveIntoRoom}
 
-The \hl{MoveIntoRoom} state machine has for purpose to let robots go towards
+The \hl{MoveIntoRoom.lua} state machine has for purpose to let robots go towards
 a room and detect when the robot is inside said room. First, the robot is
 attracted by the door associated with the room. When the robot is close enough
 to the door (1st threshold), then it is attracted by elements inside the room
 (objects and light source). Once a 2nd threshold has been reached, the robot is
 considered inside the room.
+
+\subsubsection{Message channels}
+
+The following bytes have been reserved for the range\_and\_bearing system to
+exchange messages (see \hl{MsgBytes.lua}).
+
+\begin{enumerate}
+    \item ping, notify position of current robot to other robots, used for
+    pattern formation
+    \item red, red component of a room's color
+    \item green, green component of a room's color
+    \item blue, blue component of a room's color
+    \item L robot partial score (light intensity + objects evaluation)
+    \item G robot partial score (ground evaluation)
+    \item associated room's total score
+\end{enumerate}
 
 \subsection{Main steps}
 
