@@ -30,6 +30,15 @@ to the door (1st threshold), then it is attracted by elements inside the room
 (objects and light source). Once a 2nd threshold has been reached, the robot is
 considered inside the room.
 
+\subsubsection{TargetRoomFormation}
+
+The \hl{TargetRoomFormation.lua} has for purpose to let robots go towards their
+target once inside a room. Light robots go towards the light source and Ground
+robots go towards the door step. Moreover, a vector reprensenting robots
+interaction is computed using the Lennard-Jones force. This is done in order
+to avoid robots blocking each other (repulsion), while keeping them close to
+avoid unecessary wandering.
+
 \subsubsection{Message channels}
 
 The following bytes have been reserved for the range\_and\_bearing system to
