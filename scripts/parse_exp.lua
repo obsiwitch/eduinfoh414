@@ -13,7 +13,6 @@ for i=1,10 do
     local cmd = io.popen('grep -o "Best is room number [0-9]" '
         .. conf_file .. ' | cut -f 5 -d " "')
     local bestRoom = tonumber(cmd:read())
-    print(bestRoom)
     
     local cmd = io.popen('tail -n 1 ' .. result_file .. ' | cut -f1')
     local timeSteps = tonumber(cmd:read())
@@ -29,7 +28,6 @@ for i=1,10 do
             id = j-2,
             nRobots = tonumber(cmd:read())
         }
-        print(room.nRobots)
         
         if (room.nRobots > chosenRoom.nRobots) then
             chosenRoom = room
