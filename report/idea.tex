@@ -6,7 +6,7 @@
 the states of the main controller, \hl{SwarmRobotics.lua}).
 
 \begin{enumerate}
-    \item Initialization
+    \item Initialisation
     \item Robots split into rooms by going to the nearest room. It does not
     ensure that a robot of each type will be in each room (see Analysis \&
     Problems section).
@@ -14,7 +14,7 @@ the states of the main controller, \hl{SwarmRobotics.lua}).
     ground robots. Compute the 3 values to evaluate the room.
     \item Robots go towards farther robots in order to exit the current room.
     They group themselves inside the central room and share partial scores to
-    obtain total score for their assignated room. Once total scores are computed,
+    obtain total score for their associated room. Once total scores are computed,
     they can be shared to decide which is the best one.
     \item Go towards the best detected room.
 \end{enumerate}
@@ -34,16 +34,16 @@ considered inside the room.
 
 The \hl{TargetRoomFormation.lua} has for purpose to let robots go towards their
 target once inside a room. Light robots go towards the light source and Ground
-robots go towards the door step. Moreover, a vector reprensenting robots
+robots go towards the door step. Moreover, a vector representing robots
 interaction is computed using the Lennard-Jones force. This is done in order
 to avoid robots blocking each other (repulsion), while keeping them close to
-avoid unecessary wandering.
+avoid unnecessary wandering.
 
 \subsubsection{EvaluateRoom}
 
 \hl{EvaluateRoom.lua} lets robot evaluate their room. Light robots will evaluate
 the light intensity and the number of objects, while ground robots will evaluate
-the ground color. The evaluation is considered done when the partial score has
+the ground colour. The evaluation is considered done when the partial score has
 not been improved for a specific number of steps.\\
 
 For the evaluation of objects, objects outside the current target room can be
@@ -52,9 +52,9 @@ around the robot are discarded.
 
 \subsubsection{SynchronizeScores}
 
-\hl{SynchronizeScores.lua} lets robots share and synchronize partial and total
+\hl{SynchronizeScores.lua} lets robots share and synchronise partial and total
 scores. First, partial scores are shared between robots to try to complete
-the total score for their assignated room. Once the total score has been
+the total score for their associated room. Once the total score has been
 computed, it is shared and the room having the best score is kept.
 
 \subsubsection{Message channels}
@@ -65,14 +65,15 @@ exchange messages (see \hl{MsgBytes.lua}).
 \begin{enumerate}
     \item ping, notify position of current robot to other robots, used for
     pattern formation
-    \item red, red component of a room's color
-    \item green, green component of a room's color
-    \item blue, blue component of a room's color
+    \item red, red component of a room's colour
+    \item green, green component of a room's colour
+    \item blue, blue component of a room's colour
     \item L robot partial score (light intensity + objects evaluation)
     \item G robot partial score (ground evaluation)
     \item associated room's total score
 \end{enumerate}
 
+\newpage
 \subsection{Main steps}
 
 \begin{figure}[h!]
@@ -104,5 +105,4 @@ exchange messages (see \hl{MsgBytes.lua}).
         \caption{Main steps}\label{fig:steps}
 \end{figure}
 
-% TODO screenshots steps
 \newpage
