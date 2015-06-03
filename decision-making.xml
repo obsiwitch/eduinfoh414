@@ -6,7 +6,7 @@
   <!-- ************************* -->
   <framework>
     <!-- To make ARGoS faster, you can set 'threads' to some number greater than 0 -->
-    <system threads="0" />
+    <system threads="4" />
     <!-- To change the random seed for each experiment repetition, you can set 'random_seed' to whatever value you like -->
     <experiment length="0" ticks_per_second="10" random_seed="0" />
   </framework>
@@ -179,7 +179,7 @@
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="10" max_trials="10" base_num="1">
         <foot-bot id="fbG" rab_range="1.5" omnidirectional_camera_aperture="85.2">
-          <controller config="controllerG" /> 
+          <controller config="controllerG" />
         </foot-bot>
       </entity>
     </distribute>
@@ -188,10 +188,10 @@
     <!-- Foot-bots L -->
     <distribute>
       <position method="uniform" min="-1.5,-1.5,0" max="1.5,1.5,0" />
-      <orientation method="uniform" min="0,0,0" max="360,0,0" />   
+      <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="10" max_trials="10" base_num="1">
         <foot-bot id="fbL" rab_range="1.5" omnidirectional_camera_aperture="85.2">
-          <controller config="controllerL" /> 
+          <controller config="controllerL" />
         </foot-bot>
       </entity>
     </distribute>
