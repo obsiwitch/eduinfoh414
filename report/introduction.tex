@@ -1,4 +1,21 @@
 \section{Introduction}
-% TODO
 
-\newpage
+The project consists of being able to move a swarm of robots from a central room
+to the best neighbouring room. The four target rooms on each side of the central
+room are evaluated based on the average of 3 metrics:
+
+\begin{itemize}
+    \item the \textbf{ground color} ($v_G \in [0,1]$),
+    \item the \textbf{light intensity} ($v_L \in [0,1]$),
+    \item the proportion of \textbf{objects} ($v_O \in [0,1]$ from the number
+    of objects
+$\in [2,12]$).
+\end{itemize}
+
+\noindent There are 2 types of robots, ground robots and light robots. Both of
+them can evaluate the number of objects with an omnidirectional camera. Only the
+ground robots can evaluate the ground color, and only the light robots can
+evaluate the light intensity.\\
+
+\noindent In order to attain the best room, the swarm must spread, evaluate rooms and
+collectively decide on which is the best room.
