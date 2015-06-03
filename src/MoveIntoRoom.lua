@@ -68,17 +68,7 @@ function MoveIntoRoom.init(doorColor)
         
         -- 1) Attraction by door.
         if (state == STATES.DOOR_ATTRACTION) then
-            local targetVector = targetDoor
-            targetVector.value = targetDoor.distance
-            
-            local escapeVector = getEscapeVector()
-            escapeVector.value = escapeVector.value * 100
-            
-            local finalVector = headTailSumPolarVectors({
-                targetVector, escapeVector
-            })
-            
-            Bot.goTowardsAngle(finalVector.angle)
+            Bot.goTowardsAngle(targetDoor.angle)
             
             if (targetDoor.distance < DOOR_THRESHOLD) then
                 state = STATES.MOVE_INTO_ROOM
