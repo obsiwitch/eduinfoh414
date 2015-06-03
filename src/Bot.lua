@@ -5,7 +5,7 @@ function Bot.init()
     --[[ Constants ]]
     
     -- Max wheel speed
-    local WHEEL_SPEED = 20
+    local WHEEL_SPEED = 10
 
     -- Coefficient for computing the angular velocity
     local K_PROP = 20;

@@ -44,12 +44,10 @@
         <footbot_turret_encoder implementation="default" />
         <range_and_bearing implementation="medium" medium="rab" show_rays="false" />
       </sensors>
-      <!-- If you want to execute ARGoS with an empty script, use this syntax -->
+      <!-- empty script -->
       <!-- <params /> -->
-      <!-- If you want to execute ARGoS with a script preloaded, use this syntax
-           Note: the preloaded script does not appear in the Lua editor! (that's a TODO) -->
-      <params />
-      <!--params script="controller.lua" /-->
+      <!-- preloaded script -->
+      <params script="src/SwarmRobotics.lua" />
     </lua_controller>
     <lua_controller id="controllerL">
       <actuators>
@@ -67,12 +65,10 @@
         <footbot_turret_encoder implementation="default" />
         <range_and_bearing implementation="medium" medium="rab" show_rays="false" />
       </sensors>
-      <!-- If you want to execute ARGoS with an empty script, use this syntax -->
+      <!-- empty script -->
       <!-- <params /> -->
-      <!-- If you want to execute ARGoS with a script preloaded, use this syntax
-           Note: the preloaded script does not appear in the Lua editor! (that's a TODO) -->
-      <params />
-      <!--params script="controller.lua" /-->
+      <!-- preloaded script -->
+      <params script="src/SwarmRobotics.lua" />
     </lua_controller>
   </controllers>
 
