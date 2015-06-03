@@ -50,6 +50,13 @@ For the evaluation of objects, objects outside the current target room can be
 detected. In order to avoid this situation, objects outside a 3m meter radius
 around the robot are discarded.
 
+\subsubsection{SynchronizeScores}
+
+\hl{SynchronizeScores.lua} lets robots share and synchronize partial and total
+scores. First, partial scores are shared between robots to try to complete
+the total score for their assignated room. Once the total score has been
+computed, it is shared and the room having the best score is kept.
+
 \subsubsection{Message channels}
 
 The following bytes have been reserved for the range\_and\_bearing system to
