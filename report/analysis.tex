@@ -54,7 +54,8 @@ time in some part of the program, which leads to some behaviours difficult to
 predict. Computed forces should be analysed more in depth (compare the curves)
 to be able to use them efficiently. As of now, forces lead to some problems such
 as robots wandering out of a target room, or collisions due to some forces
-having a value higher than the one for the obstacle avoidance.
+having a value higher than the one for the obstacle avoidance (see figure
+\ref{fig:blocked}).
 
 \subsection{Swarm size problem}
 
@@ -63,6 +64,26 @@ and the computation time increases. There are no visible advantages, since
 there seems to be around 6 out of 10 experiments where the best room was found
 in all cases, and the average \% of robots in the chosen room decreases with N
 increasing. The situation could be improved if the problem with the forces was
-solved.
+solved.\\
+
+\begin{figure}[h!]
+        \centering
+        \begin{subfigure}[b]{0.5\textwidth}
+                \includegraphics[width=\textwidth]{images/blocked_entrance.png}
+        \end{subfigure}%
+        ~
+        \begin{subfigure}[b]{0.5\textwidth}
+                \includegraphics[width=\textwidth]{images/blocked_entrance1.png}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.5\textwidth}
+                \includegraphics[width=\textwidth]{images/blocked_entrance2.png}
+        \end{subfigure}%
+        ~
+        \begin{subfigure}[b]{0.5\textwidth}
+                \includegraphics[width=\textwidth]{images/blocked_forces.png}
+        \end{subfigure}
+        \caption{Blocked robots}\label{fig:blocked}
+\end{figure}
 
 % TODO screenshots
