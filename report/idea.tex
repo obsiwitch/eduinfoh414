@@ -39,6 +39,17 @@ interaction is computed using the Lennard-Jones force. This is done in order
 to avoid robots blocking each other (repulsion), while keeping them close to
 avoid unecessary wandering.
 
+\subsubsection{EvaluateRoom}
+
+\hl{EvaluateRoom.lua} lets robot evaluate their room. Light robots will evaluate
+the light intensity and the number of objects, while ground robots will evaluate
+the ground color. The evaluation is considered done when the partial score has
+not been improved for a specific number of steps.\\
+
+For the evaluation of objects, objects outside the current target room can be
+detected. In order to avoid this situation, objects outside a 3m meter radius
+around the robot are discarded.
+
 \subsubsection{Message channels}
 
 The following bytes have been reserved for the range\_and\_bearing system to
