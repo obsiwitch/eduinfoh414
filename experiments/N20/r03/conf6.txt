@@ -1,0 +1,35 @@
+[INFO] Loaded library "/usr/lib/argos3/libargos3plugin_simulator_sensors.so"
+[INFO] Loaded library "/usr/lib/argos3/libargos3plugin_simulator_actuators.so"
+[INFO] Loaded library "/usr/lib/argos3/libargos3plugin_simulator_dynamics2d.so"
+[INFO] Loaded library "/usr/lib/argos3/libargos3plugin_simulator_epuck.so"
+[INFO] Loaded library "/usr/lib/argos3/libargos3core_simulator.so"
+[INFO] Loaded library "/usr/lib/argos3/libargos3plugin_simulator_qtopengl.so"
+[INFO] Loaded library "/usr/lib/argos3/libargos3plugin_simulator_media.so"
+[INFO] Loaded library "/usr/lib/argos3/libargos3plugin_simulator_entities.so"
+[INFO] Loaded library "/usr/lib/argos3/libargos3plugin_simulator_footbot.so"
+[INFO] Loaded library "/usr/lib/argos3/libargos3plugin_simulator_genericrobot.so"
+[INFO] Loaded library "/home/obside/Documents/ULB/INFOH414_Swarm_Intelligence/Project/build/libdecision_making.so"
+[INFO] Using 4 parallel threads
+[INFO]   Method "balance_quantity" chosen: threads will be assigned the same
+[INFO]   number of tasks, independently of the task length.
+[INFO] Using random seed = 523381
+[INFO] Using simulation clock tick = 0.1
+[INFO] Total experiment length in clock ticks = unlimited
+[INFO] The physics engine "dyn2d" will perform 50 iterations per tick (dt = 0.002 sec)
+Floor color in room 0: 0.122323
+Light intensity in room 0: 0.674963
+Num objects in room 0: 2 evaluated: 0
+Room 0 evaluation: 0.265762
+Floor color in room 1: 0.631208
+Light intensity in room 1: 0.604277
+Num objects in room 1: 2 evaluated: 0
+Room 1 evaluation: 0.411828
+Floor color in room 2: 0.411588
+Light intensity in room 2: 0.565088
+Num objects in room 2: 8 evaluated: 0.6
+Room 2 evaluation: 0.525559
+Floor color in room 3: 0.0321606
+Light intensity in room 3: 0.842644
+Num objects in room 3: 4 evaluated: 0.2
+Room 3 evaluation: 0.358268
+Best is room number 2 with evaluation: 0.525559
