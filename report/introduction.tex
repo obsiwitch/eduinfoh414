@@ -19,3 +19,32 @@ evaluate the light intensity.\\
 
 \noindent In order to attain the best room, the swarm must spread, evaluate rooms and
 collectively decide on which is the best room.
+
+\subsection{Project hierarchy}
+
+\begin{framed}
+\dirtree{%
+.1 Project/.
+.2 experiments/ - Output results.
+.2 report/.
+.2 scripts/ - Scripts to parse output results.
+.2 src/.
+.2 decision-making.xml - Argos configuration file.
+.2 run.sh - Script to run 10 experiments sequentially.
+.2 variables - Set the ARGOS\_PLUGIN\_PATH environment variable.
+}
+\end{framed}
+
+\subsection {Build instructions}
+
+\begin{lstlisting}
+> mkdir build
+> cd build
+> cmake -DCMAKE_BUILD_TYPE=Release ../src/decision_making
+> make
+> cd ..
+> source variables
+> argos3 -c decision-making.xml
+\end{lstlisting}
+
+\newpage
