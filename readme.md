@@ -1,5 +1,7 @@
 # INFO-H-414 - Swarm Robotics Project (2015)
 
+![screenshot](report/images/5_best.png)
+
 ## Build instructions
 
 ~~~
@@ -22,5 +24,5 @@ The ```run.sh``` will launch argos3 with the experiment configuration file and
 the preloaded script on robots. Launch the experiment in the simulation window
 and stop it approximately when you think it is finished. A file containing
 information on the current experiment configuration and a file with the results
-of the exeperiment are generated in the ```out/``` directory. The next
+of the experiment are generated in the ```out/``` directory. The next
 experiment is launched when the current experiment's simulation window is closed.
