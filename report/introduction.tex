@@ -31,7 +31,7 @@ collectively decide on which is the best room.
 .2 src/.
 .2 decision-making.xml - Argos configuration file.
 .2 run.sh - Script to run 10 experiments sequentially.
-.2 variables - Set the ARGOS\_PLUGIN\_PATH environment variable.
+.2 env.sh - Set the ARGOS\_PLUGIN\_PATH environment variable.
 }
 \end{framed}
 
@@ -43,7 +43,7 @@ collectively decide on which is the best room.
 > cmake -DCMAKE_BUILD_TYPE=Release ../src/decision_making
 > make
 > cd ..
-> source variables
+> source env.sh
 > argos3 -c decision-making.xml
 \end{lstlisting}
 

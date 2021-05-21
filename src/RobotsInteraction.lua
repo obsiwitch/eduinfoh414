@@ -20,19 +20,19 @@ local EPSILON = 20
 function computeRobotsInteraction(targetDistance)
     targetDistance = targetDistance or TARGET_DIST
     local accumulator = { x = 0, y = 0 }
-    
+
     for _,msg in ipairs(robot.range_and_bearing) do
         if msg.data[I_BYTE_PING] == 1 then
             local cartesianVector = polarToCartesianCoords({
                 value = computeLennardJonesForce(msg.range, targetDistance),
                 angle = msg.horizontal_bearing
             })
-            
+
             accumulator.x = accumulator.x + cartesianVector.x
             accumulator.y = accumulator.y + cartesianVector.y
         end
     end
-    
+
     return cartesianToPolarCoords(accumulator)
 end
 
@@ -43,5 +43,5 @@ function computeLennardJonesForce(distance, targetDistance)
     return -4 * EPSILON/distance * (
         math.pow(targetDistance/distance, 4)
         - math.pow(targetDistance/distance, 2)
-    );
+    )
 end

@@ -1,4 +1,4 @@
-# INFO-H-414 - Swarm Robotics Project
+# INFO-H-414 - Swarm Robotics Project (2015)
 
 ## Build instructions
 
@@ -8,7 +8,7 @@
 > cmake -DCMAKE_BUILD_TYPE=Release ../src/decision_making
 > make
 > cd ..
-> source variables
+> source env.sh
 > argos3 -c decision-making.xml
 ~~~
 
